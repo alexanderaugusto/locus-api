@@ -4,7 +4,7 @@ const dbConfig = {
   development: {
     username: "root",
     password: "root",
-    database: "db_imovel_dev",
+    database: "imovel",
     host: "localhost",
     port: "3306",
     dialect: "mysql",
@@ -18,7 +18,7 @@ const dbConfig = {
   production: {
     username: "root",
     password: "root",
-    database: "db_imovel_dev",
+    database: "imovel",
     host: "localhost",
     port: "3306",
     dialect: "mysql",
