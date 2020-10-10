@@ -55,6 +55,13 @@ module.exports = {
       ]
     })
       .then((property) => {
+        if(!property){
+          return res.status(400).json({
+            cod: 400,
+            message: 'Não conseguimos listar esta propriedade! Por favor, verifique os dados fornecidos e tente novamente.'
+          })
+        }
+
         return res.json(property)
       })
       .catch((err) => {

@@ -33,6 +33,13 @@ module.exports = {
 
     User.findByPk(id)
       .then((user) => {
+        if(!user){
+          return res.status(400).json({
+            cod: 400,
+            message: 'Não conseguimos listar este usuário! Por favor, verifique os dados fornecidos e tente novamente.'
+          })
+        }
+
         return res.json(user)
       })
       .catch((err) => {
@@ -48,6 +55,13 @@ module.exports = {
 
     User.findByPk(id, { include: { association: 'properties' } })
       .then((user) => {
+        if(!user){
+          return res.status(400).json({
+            cod: 400,
+            message: 'Não conseguimos listar as propriedades do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
+          })
+        }
+
         return res.json(user.properties)
       })
       .catch((err) => {
@@ -63,6 +77,13 @@ module.exports = {
 
     User.findByPk(id, { include: { association: 'rentals' } })
       .then((user) => {
+        if(!user){
+          return res.status(400).json({
+            cod: 400,
+            message: 'Não conseguimos listar os aluguéis do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
+          })
+        }
+
         return res.json(user.rentals)
       })
       .catch((err) => {
@@ -78,6 +99,13 @@ module.exports = {
 
     User.findByPk(id, { include: { association: 'favorites' } })
       .then((user) => {
+        if(!user){
+          return res.status(400).json({
+            cod: 400,
+            message: 'Não conseguimos listar os favoritos do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
+          })
+        }
+
         return res.json(user.favorites)
       })
       .catch((err) => {
