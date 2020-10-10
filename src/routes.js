@@ -2,8 +2,11 @@ const routes = require('express').Router()
 const multer = require('multer')
 const multerConfig = require('./config/multer')
 
+const AuthController = require('./controllers/AuthController')
 const UserController = require('./controllers/UserController')
 const PropertyController = require('./controllers/PropertyController')
+
+routes.post('/auth/login', AuthController.login)
 
 routes.post('/user', multer(multerConfig('/user')).single('file'), UserController.create)
 routes.get('/user/:user_id', UserController.list)
