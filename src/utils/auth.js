@@ -15,8 +15,13 @@ const generateJwt = (params) => {
   })
 }
 
+const verifyJwt = (token, cb) => {
+  return jwt.verify(token, process.env.AUTH_SECRET, cb)
+}
+
 module.exports = {
   encryptPassword,
   comparePassword,
-  generateJwt
+  generateJwt,
+  verifyJwt
 }
