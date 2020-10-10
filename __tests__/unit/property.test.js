@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../../src/app')
 const factory = require('../factories')
 const truncate = require('../utils/truncate')
-const deleteFile = require('../../src/utils/deleteFile')
+const { generateJwt } = require('../../src/utils/auth')
 
 describe("Property test", () => {
   beforeEach(async () => {
@@ -27,6 +27,7 @@ describe("Property test", () => {
         place: 3,
         type: "Casa"
       })
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.user_id).toBe(user.id)
@@ -43,6 +44,7 @@ describe("Property test", () => {
   })
 
   it("Should update a property using api route", async () => {
+    const user = await factory.create('User')
     const property = await factory.create('Property')
 
     const response = await request(app)
@@ -51,15 +53,18 @@ describe("Property test", () => {
         area: 40,
         price: 1200.00
       })
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
   })
 
   it("Should delete a property using api route", async () => {
+    const user = await factory.create('User')
     const property = await factory.create('Property')
 
     const response = await request(app)
       .delete("/property/" + property.id)
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
   })

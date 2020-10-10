@@ -3,6 +3,7 @@ const app = require('../../src/app')
 const factory = require('../factories')
 const truncate = require('../utils/truncate')
 const deleteFile = require('../../src/utils/deleteFile')
+const { generateJwt } = require('../../src/utils/auth')
 
 describe("User test", () => {
   beforeEach(async () => {
@@ -45,6 +46,7 @@ describe("User test", () => {
 
     const response = await request(app)
       .get("/user/" + user.id)
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.id).toBe(user.id)
@@ -61,6 +63,7 @@ describe("User test", () => {
 
     const response = await request(app)
       .get("/user/" + user.id + "/properties")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.length).toBe(2)
@@ -77,6 +80,7 @@ describe("User test", () => {
 
     const response = await request(app)
       .get("/user/" + user.id + "/rentals")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.length).toBe(2)
@@ -93,6 +97,7 @@ describe("User test", () => {
 
     const response = await request(app)
       .get("/user/" + user.id + "/favorites")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.length).toBe(2)
@@ -107,6 +112,7 @@ describe("User test", () => {
         name: "Vanessa Swerts",
         cpf: "000.000.000-11"
       })
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
   })
@@ -118,6 +124,7 @@ describe("User test", () => {
       .put("/user/" + user.id)
       .field("name", "Vanessa Swerts")
       .attach("file", "__tests__/utils/test.jpg")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     deleteFile("user/" + response.body.avatar)
 
@@ -130,6 +137,7 @@ describe("User test", () => {
 
     const response = await request(app)
       .delete("/user/" + user.id)
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
   })
