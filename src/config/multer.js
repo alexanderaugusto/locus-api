@@ -2,6 +2,8 @@ const multer = require('multer')
 const path = require('path')
 const mkdirp = require('mkdirp')
 const crypto = require('crypto')
+const cloudinary = require('./cloudinary')
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
 
 const storageTypes = {
   local: (folder) => multer.diskStorage({
@@ -19,6 +21,19 @@ const storageTypes = {
 
         cb(null, file.key)
       })
+    }
+  }),
+  cloudinary: (folder) => new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: folder.replace('/', ''),
+      public_id: (req, file) => {
+        const hash = crypto.randomBytes(16).toString('hex')
+        const filename = `${hash}-${file.originalname}`
+        file.key = filename
+
+        return filename.split('.').slice(0, -1).join('.')
+      }
     }
   })
 }
