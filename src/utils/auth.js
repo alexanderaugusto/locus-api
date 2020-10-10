@@ -11,7 +11,7 @@ const comparePassword = (password1, password2) => {
 
 const generateJwt = (params) => {
   return jwt.sign(params, process.env.AUTH_SECRET, {
-    expiresIn: 864000
+    expiresIn: 172800
   })
 }
 
