@@ -1,2 +1,3 @@
 # IMovel
-This repository contain the IMovel application created to Software Engineering subject
+
+[![Build Status](https://travis-ci.com/alexanderaugusto/imovel-api.svg?branch=master)](https://travis-ci.com/alexanderaugusto/imovel-api)
