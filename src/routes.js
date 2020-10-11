@@ -7,6 +7,38 @@ const AuthController = require('./controllers/AuthController')
 const UserController = require('./controllers/UserController')
 const PropertyController = require('./controllers/PropertyController')
 
+/**
+ * @swagger
+ * /auth/login:
+ *    post:
+ *      description: Use to do a login at IMovel app
+ *      tags:
+ *        - Authentication routes
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        200: 
+ *          description: OK
+ *        402: 
+ *          description: Email or password incorrects
+ *        500:
+ *          description: Server error
+ *      parameters:
+ *      - name: email
+ *        in: body
+ *        description: User email
+ *        required: true
+ *        schema:
+ *          type: string
+ *          example: <USER_EMAIL>
+ *      - name: password
+ *        in: body
+ *        description: User password
+ *        required: true
+ *        schema:
+ *          type: string
+ *          example: <USER_PASSWORD>
+ */
 routes.post('/auth/login', AuthController.login)
 
 routes.post('/user', multer(multerConfig('/user')).single('file'), UserController.create)
