@@ -1,22 +1,36 @@
 const swaggerJsDoc = require('swagger-jsdoc')
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      version: "1.0.0",
-      title: "IMovel API",
-      description: "Customer API information",
-      contact: {
-        name: "Alexander Augusto",
-        email: "alexaasf_10@hotmail.com",
-        url: "https://alexanderaugusto.com/"
-      }
-    },
-    tags: "Requests",
-    host: "https://imovel-api.herokuapp.com",
-    servers: ["https://imovel-api.herokuapp.com"]
+const swaggerDefinition = {
+  info: {
+    version: "1.0.0",
+    title: "IMovel API",
+    description: "Customer API information",
+    contact: {
+      name: "Alexander Augusto",
+      email: "alexaasf_10@hotmail.com",
+      url: "https://alexanderaugusto.com/"
+    }
   },
-  apis: ["src/routes.js"]
+  host: !process.env.NODE_ENV ? "localhost:5000" : "imovel-api.herokuapp.com",
+  schemes: ["http", "https"],
+  servers: {
+    url: "https://imovel-api.herokuapp.com",
+    description: "This is the production API",
+    url: "http://localhost:5000",
+    description: "This is the development API"
+  },
+  securityDefinitions: {
+    bearerAuth: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header"
+    }
+  }
 }
 
-module.exports  = swaggerJsDoc(swaggerOptions)
+const options = {
+  swaggerDefinition,
+  apis: ["src/doc/*"]
+}
+
+module.exports = swaggerJsDoc(options)

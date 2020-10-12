@@ -1,0 +1,31 @@
+paths: 
+  /auth/login:
+    post:
+      description: Used to do a login at IMovel app
+      tags:
+        - Authentication routes
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: User data to login
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email: 
+                type: string
+                example: <USER_EMAIL>
+              password:
+                type: string
+                example: <USER_PASSWORD>
+      responses:
+        200: 
+          description: OK
+        402: 
+          description: Email or password incorrects
+        500:
+          description: Server error
