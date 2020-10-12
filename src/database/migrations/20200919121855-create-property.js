@@ -7,6 +7,14 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       street: {
         type: Sequelize.STRING,
         allowNull: false
@@ -41,6 +49,10 @@ module.exports = {
       },
       place: {
         type: Sequelize.INTEGER,
+        allowNull: true
+      },
+      animal: {
+        type: Sequelize.BOOLEAN,
         allowNull: true
       },
       type: {

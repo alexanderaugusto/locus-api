@@ -1,5 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Property = sequelize.define('Property', {
+    title: DataTypes.STRING,
+    description: DataTypes.STRING,
     street: DataTypes.STRING,
     city: DataTypes.STRING,
     state: DataTypes.STRING,
@@ -9,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     bathrooms: DataTypes.INTEGER,
     area: DataTypes.FLOAT,
     place: DataTypes.INTEGER,
+    animal: DataTypes.BOOLEAN,
     type: DataTypes.STRING
   })
 

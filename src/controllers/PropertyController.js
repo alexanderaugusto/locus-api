@@ -2,10 +2,25 @@ const { Property, Image } = require('../models')
 
 module.exports = {
   create: async (req, res) => {
-    const { user_id, street, city, state, country, price, bedrooms, bathrooms, area, place, type } = req.body
+    const {
+      user_id,
+      title,
+      description,
+      animal,
+      street,
+      city,
+      state,
+      country,
+      price,
+      bedrooms,
+      bathrooms,
+      area,
+      place,
+      type
+    } = req.body
     const { files = [] } = req
 
-    Property.create({ user_id, street, city, state, country, price, bedrooms, bathrooms, area, place, type })
+    Property.create({ user_id, title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type })
       .then((property) => {
         if (!property) {
           return res.status(400).json({
@@ -55,7 +70,7 @@ module.exports = {
       ]
     })
       .then((property) => {
-        if(!property){
+        if (!property) {
           return res.status(400).json({
             cod: 400,
             message: 'Não conseguimos listar esta propriedade! Por favor, verifique os dados fornecidos e tente novamente.'
@@ -74,9 +89,9 @@ module.exports = {
 
   update: async (req, res) => {
     const { property_id: id } = req.params
-    const { street, city, state, country, price, bedrooms, bathrooms, area, place, type } = req.body
+    const { title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type } = req.body
 
-    Property.update({ street, city, state, country, price, bedrooms, bathrooms, area, place, type }, { where: { id } })
+    Property.update({ title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type }, { where: { id } })
       .then(([updated]) => {
         if (!updated) {
           return res.status(400).json({
@@ -97,7 +112,7 @@ module.exports = {
 
   delete: async (req, res) => {
     const { property_id: id } = req.params
-    
+
     Property.destroy({ where: { id } })
       .then((deleted) => {
         if (!deleted) {

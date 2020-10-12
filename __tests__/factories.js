@@ -19,6 +19,9 @@ factory.define('User', User, {
 })
 
 factory.define('Property', Property, {
+  title: "Casa da Praia",
+  description: "Esta casa possui vista para o mar e é muito bonita",
+  animal: true,
   street: "Avenida João de Camargo",
   city: "Santa Rita do Sapucaí",
   state: "MG",

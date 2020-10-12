@@ -16,6 +16,8 @@ describe("Property test", () => {
       .post("/property")
       .send({
         user_id: user.id,
+        title: "Casa da Prata",
+        description: "Esta casa possui vista para o mar e é muito bonita",
         street: "Av. João de Camargo",
         city: "Santa Rita do Sapucaí",
         state: "MG",
@@ -25,6 +27,7 @@ describe("Property test", () => {
         bathrooms: 1,
         area: 40,
         place: 3,
+        animal: true,
         type: "Casa"
       })
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
