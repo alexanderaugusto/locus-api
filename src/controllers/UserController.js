@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Property } = require('../models')
 const deleteFile = require('../utils/deleteFile')
 
 module.exports = {
@@ -33,7 +33,7 @@ module.exports = {
 
     User.findByPk(id)
       .then((user) => {
-        if(!user){
+        if (!user) {
           return res.status(400).json({
             cod: 400,
             message: 'Não conseguimos listar este usuário! Por favor, verifique os dados fornecidos e tente novamente.'
@@ -55,7 +55,7 @@ module.exports = {
 
     User.findByPk(id, { include: { association: 'properties' } })
       .then((user) => {
-        if(!user){
+        if (!user) {
           return res.status(400).json({
             cod: 400,
             message: 'Não conseguimos listar as propriedades do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
@@ -77,7 +77,7 @@ module.exports = {
 
     User.findByPk(id, { include: { association: 'rentals' } })
       .then((user) => {
-        if(!user){
+        if (!user) {
           return res.status(400).json({
             cod: 400,
             message: 'Não conseguimos listar os aluguéis do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
@@ -99,7 +99,7 @@ module.exports = {
 
     User.findByPk(id, { include: { association: 'favorites' } })
       .then((user) => {
-        if(!user){
+        if (!user) {
           return res.status(400).json({
             cod: 400,
             message: 'Não conseguimos listar os favoritos do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
@@ -174,6 +174,84 @@ module.exports = {
         return res.status(500).json({
           cod: 500,
           msg: 'Ocorreu um erro inesperado ao apagar o usuário. Por favor, tentar novamente.'
+        })
+      })
+  },
+
+  add_favorite: async (req, res) => {
+    const { user_id } = req.params
+    const { property_id } = req.body
+
+    const user = await User.findByPk(user_id)
+    if (!user) {
+      return res.status(400).json({
+        cod: 400,
+        msg: 'Este usuário não existe na base de dados.'
+      })
+    }
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(400).json({
+        cod: 400,
+        msg: 'Este imóvel não existe na base de dados.'
+      })
+    }
+
+    user.addFavorite(property)
+      .then((favorite) => {
+        if (!favorite) {
+          return res.status(400).json({
+            cod: 400,
+            msg: 'Ocorreu um erro ao adicionar este imóvel como favorito.'
+          })
+        }
+
+        return res.status(204).json()
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          cod: 500,
+          msg: 'Ocorreu um erro inesperado ao adicionar o imóvel como favorito. Por favor, tentar novamente.'
+        })
+      })
+  },
+
+  remove_favorite: async (req, res) => {
+    const { user_id } = req.params
+    const { property_id } = req.body
+
+    const user = await User.findByPk(user_id)
+    if (!user) {
+      return res.status(400).json({
+        cod: 400,
+        msg: 'Este usuário não existe na base de dados.'
+      })
+    }
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(400).json({
+        cod: 400,
+        msg: 'Este imóvel não existe na base de dados.'
+      })
+    }
+
+    user.removeFavorite(property)
+      .then((deleted) => {
+        if (!deleted) {
+          return res.status(400).json({
+            cod: 400,
+            msg: 'Ocorreu um erro ao apagar este imóvel dos favoritos.'
+          })
+        }
+
+        return res.status(204).json()
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          cod: 500,
+          msg: 'Ocorreu um erro inesperado ao apagar o imóvel dos favoritos. Por favor, tentar novamente.'
         })
       })
   }

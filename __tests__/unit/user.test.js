@@ -141,4 +141,34 @@ describe("User test", () => {
 
     expect(response.status).toBe(204)
   })
+
+  it("Should add favorite property to user using api route", async () => {
+    const user = await factory.create('User')
+    const property = await factory.create('Property')
+
+    const response = await request(app)
+      .post("/user/" + user.id + "/favorite")
+      .send({
+        property_id: property.id,
+      })
+
+    expect(response.status).toBe(204)
+  })
+
+  it("Should remove favorite property from user using api route", async () => {
+    const user = await factory.create('User')
+    const property = await factory.create('Property')
+    await factory.create('Favorite', {
+      user_id: user.id,
+      property_id: property.id
+    })
+
+    const response = await request(app)
+      .delete("/user/" + user.id + "/favorite")
+      .send({
+        property_id: property.id,
+      })
+
+    expect(response.status).toBe(204)
+  })
 })
