@@ -9,13 +9,12 @@ describe("Property test", () => {
     await truncate()
   })
 
-  it("Should create a property without images using api route", async () => {
+  it("Should create a property to user without images using api route", async () => {
     const user = await factory.create('User')
 
     const response = await request(app)
-      .post("/property")
+      .post("/user/property")
       .send({
-        user_id: user.id,
         title: "Casa da Prata",
         description: "Esta casa possui vista para o mar e é muito bonita",
         street: "Av. João de Camargo",
@@ -36,22 +35,31 @@ describe("Property test", () => {
     expect(response.body.user_id).toBe(user.id)
   })
 
-  it("Should list a property using api route", async () => {
-    const property = await factory.create('Property')
+  it("Should list user properties using api route", async () => {
+    const user = await factory.create('User')
+    await factory.create('Property', {
+      user_id: user.id
+    })
+    await factory.create('Property', {
+      user_id: user.id
+    })
 
     const response = await request(app)
-      .get("/property/" + property.id)
+      .get("/user/" + user.id + "/properties")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
-    expect(response.body.id).toBe(property.id)
+    expect(response.body.length).toBe(2)
   })
-
-  it("Should update a property using api route", async () => {
+  
+  it("Should update a user property using api route", async () => {
     const user = await factory.create('User')
-    const property = await factory.create('Property')
+    const property = await factory.create('Property', {
+      user_id: user.id
+    })
 
     const response = await request(app)
-      .put("/property/" + property.id)
+      .put("/user/property/" + property.id)
       .send({
         area: 40,
         price: 1200.00
@@ -61,14 +69,27 @@ describe("Property test", () => {
     expect(response.status).toBe(204)
   })
 
-  it("Should delete a property using api route", async () => {
+  it("Should delete a user property using api route", async () => {
     const user = await factory.create('User')
-    const property = await factory.create('Property')
+    const property = await factory.create('Property', {
+      user_id: user.id
+    })
 
     const response = await request(app)
-      .delete("/property/" + property.id)
+      .delete("/user/property/" + property.id)
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
+  })
+
+  it("Should list all properties using api route", async () => {
+    await factory.create('Property')
+    await factory.create('Property')
+
+    const response = await request(app)
+      .get("/properties")
+
+    expect(response.status).toBe(200)
+    expect(response.body.length).toBe(2)
   })
 })

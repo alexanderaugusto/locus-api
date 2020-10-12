@@ -4,27 +4,36 @@ const multerConfig = require('./config/multer')
 const authMiddleware = require('./middleware/auth')
 
 const AuthController = require('./controllers/AuthController')
-const UserController = require('./controllers/UserController')
+const FavoriteController = require('./controllers/FavoriteController')
 const PropertyController = require('./controllers/PropertyController')
+const RentalController = require('./controllers/RentalController')
+const UserController = require('./controllers/UserController')
 
 // Authentication routes
 routes.post('/auth/login', AuthController.login)
 
 // User routes
 routes.post('/user', multer(multerConfig('/user')).single('file'), UserController.create)
-routes.get('/user/:user_id', authMiddleware, UserController.list)
-routes.get('/user/:user_id/properties', authMiddleware, UserController.list_properties)
-routes.get('/user/:user_id/rentals', authMiddleware, UserController.list_rentals)
-routes.get('/user/:user_id/favorites', authMiddleware, UserController.list_favorites)
-routes.put('/user/:user_id', authMiddleware, multer(multerConfig('/user')).single('file'), UserController.update)
-routes.delete('/user/:user_id', authMiddleware, UserController.delete)
-routes.post('/user/:user_id/favorite', UserController.add_favorite)
-routes.delete('/user/:user_id/favorite', UserController.remove_favorite)
+routes.get('/user', authMiddleware, UserController.list)
+routes.put('/user', authMiddleware, UserController.update)
+routes.put('/user/avatar', authMiddleware, multer(multerConfig('/user')).single('file'), UserController.update_image)
+routes.delete('/user', authMiddleware, UserController.delete)
+
+// Favorite routes
+routes.put('/user/favorite/:property_id', authMiddleware, FavoriteController.add)
+routes.get('/user/favorites', authMiddleware, FavoriteController.list)
+routes.delete('/user/favorite/:property_id', authMiddleware, FavoriteController.delete)
+
+// Rental routes
+routes.put('/user/rental/:property_id', authMiddleware, RentalController.add)
+routes.get('/user/rentals', authMiddleware, RentalController.list)
+routes.delete('/user/rental/:property_id', authMiddleware, RentalController.delete)
 
 // Property routes
-routes.post('/property', authMiddleware, multer(multerConfig('/property')).array('files'), PropertyController.create)
-routes.get('/property/:property_id', PropertyController.list)
-routes.put('/property/:property_id', authMiddleware, PropertyController.update)
-routes.delete('/property/:property_id', authMiddleware, PropertyController.delete)
+routes.post('/user/property', authMiddleware, multer(multerConfig('/property')).array('files'), PropertyController.create)
+routes.get('/user/:user_id/properties', PropertyController.list)
+routes.put('/user/property/:property_id', authMiddleware, PropertyController.update)
+routes.delete('/user/property/:property_id', authMiddleware, PropertyController.delete)
+routes.get('/properties', PropertyController.list_all)
 
 module.exports = routes

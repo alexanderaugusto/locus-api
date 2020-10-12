@@ -1,12 +1,11 @@
-const { Property, Image } = require('../models')
+const { User, Property, Image } = require('../models')
 
 module.exports = {
   create: async (req, res) => {
+    const { user_id, files = [] } = req
     const {
-      user_id,
       title,
       description,
-      animal,
       street,
       city,
       state,
@@ -16,9 +15,9 @@ module.exports = {
       bathrooms,
       area,
       place,
+      animal,
       type
     } = req.body
-    const { files = [] } = req
 
     Property.create({ user_id, title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type })
       .then((property) => {
@@ -61,37 +60,47 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    const { property_id: id } = req.params
+    const { user_id } = req.params
 
-    Property.findByPk(id, {
-      include: [
-        { association: 'owner' },
-        { association: 'images' }
-      ]
-    })
-      .then((property) => {
-        if (!property) {
+    User.findByPk(user_id, { include: { association: 'properties' } })
+      .then((user) => {
+        if (!user) {
           return res.status(400).json({
             cod: 400,
-            message: 'Não conseguimos listar esta propriedade! Por favor, verifique os dados fornecidos e tente novamente.'
+            message: 'Não conseguimos listar as propriedades do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
           })
         }
 
-        return res.json(property)
+        return res.json(user.properties)
       })
       .catch((err) => {
         return res.status(500).json({
           cod: 500,
-          msg: 'Ocorreu um erro inesperado ao listar o imóvel. Por favor, tentar novamente.'
+          msg: 'Ocorreu um erro inesperado ao listar as propriedades do usuário. Por favor, tentar novamente.'
         })
       })
   },
 
   update: async (req, res) => {
-    const { property_id: id } = req.params
+    const { user_id } = req
+    const { property_id } = req.params
     const { title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type } = req.body
 
-    Property.update({ title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type }, { where: { id } })
+    Property.update({
+      title,
+      description,
+      animal,
+      street,
+      city,
+      state,
+      country,
+      price,
+      bedrooms,
+      bathrooms,
+      area,
+      place,
+      type
+    }, { where: { id: property_id, user_id } })
       .then(([updated]) => {
         if (!updated) {
           return res.status(400).json({
@@ -111,9 +120,10 @@ module.exports = {
   },
 
   delete: async (req, res) => {
-    const { property_id: id } = req.params
+    const { user_id } = req
+    const { property_id } = req.params
 
-    Property.destroy({ where: { id } })
+    Property.destroy({ where: { id: property_id, user_id } })
       .then((deleted) => {
         if (!deleted) {
           return res.status(400).json({
@@ -130,5 +140,25 @@ module.exports = {
           msg: 'Ocorreu um erro inesperado ao apagar o imóvel. Por favor, tentar novamente.'
         })
       })
-  }
+  },
+
+  list_all: async (req, res) => {
+    Property.findAll({ include: { association: 'images' } })
+      .then((properties) => {
+        if (!properties) {
+          return res.status(400).json({
+            cod: 400,
+            message: 'Não conseguimos listar as propriedades! Por favor, verifique os dados fornecidos e tente novamente.'
+          })
+        }
+
+        return res.json(properties)
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          cod: 500,
+          msg: 'Ocorreu um erro inesperado ao listar as propriedades. Por favor, tentar novamente.'
+        })
+      })
+  },
 }

@@ -45,69 +45,18 @@ describe("User test", () => {
     const user = await factory.create('User')
 
     const response = await request(app)
-      .get("/user/" + user.id)
+      .get("/user")
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.id).toBe(user.id)
   })
 
-  it("Should list user properties using api route", async () => {
-    const user = await factory.create('User')
-    await factory.create('Property', {
-      user_id: user.id
-    })
-    await factory.create('Property', {
-      user_id: user.id
-    })
-
-    const response = await request(app)
-      .get("/user/" + user.id + "/properties")
-      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body.length).toBe(2)
-  })
-
-  it("Should list user rentals using api route", async () => {
-    const user = await factory.create('User')
-    await factory.create('Rental', {
-      user_id: user.id
-    })
-    await factory.create('Rental', {
-      user_id: user.id
-    })
-
-    const response = await request(app)
-      .get("/user/" + user.id + "/rentals")
-      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body.length).toBe(2)
-  })
-
-  it("Should list user favorites using api route", async () => {
-    const user = await factory.create('User')
-    await factory.create('Favorite', {
-      user_id: user.id
-    })
-    await factory.create('Favorite', {
-      user_id: user.id
-    })
-
-    const response = await request(app)
-      .get("/user/" + user.id + "/favorites")
-      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body.length).toBe(2)
-  })
-
   it("Should update a user using api route", async () => {
     const user = await factory.create('User')
 
     const response = await request(app)
-      .put("/user/" + user.id)
+      .put("/user")
       .send({
         name: "Vanessa Swerts",
         cpf: "000.000.000-11"
@@ -121,8 +70,7 @@ describe("User test", () => {
     const user = await factory.create('User')
 
     const response = await request(app)
-      .put("/user/" + user.id)
-      .field("name", "Vanessa Swerts")
+      .put("/user/avatar")
       .attach("file", "__tests__/utils/test.jpg")
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
@@ -136,38 +84,8 @@ describe("User test", () => {
     const user = await factory.create('User')
 
     const response = await request(app)
-      .delete("/user/" + user.id)
+      .delete("/user")
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
-
-    expect(response.status).toBe(204)
-  })
-
-  it("Should add favorite property to user using api route", async () => {
-    const user = await factory.create('User')
-    const property = await factory.create('Property')
-
-    const response = await request(app)
-      .post("/user/" + user.id + "/favorite")
-      .send({
-        property_id: property.id,
-      })
-
-    expect(response.status).toBe(204)
-  })
-
-  it("Should remove favorite property from user using api route", async () => {
-    const user = await factory.create('User')
-    const property = await factory.create('Property')
-    await factory.create('Favorite', {
-      user_id: user.id,
-      property_id: property.id
-    })
-
-    const response = await request(app)
-      .delete("/user/" + user.id + "/favorite")
-      .send({
-        property_id: property.id,
-      })
 
     expect(response.status).toBe(204)
   })
