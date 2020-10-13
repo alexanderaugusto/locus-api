@@ -12,7 +12,7 @@ const swaggerDefinition = {
     }
   },
   host: !process.env.NODE_ENV ? "localhost:5000" : "imovel-api.herokuapp.com",
-  schemes: ["http", "https"],
+  schemes: !process.env.NODE_ENV ? ["http"] : ["https"],
   servers: {
     url: "https://imovel-api.herokuapp.com",
     description: "This is the production API",
