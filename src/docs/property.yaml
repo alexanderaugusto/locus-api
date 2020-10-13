@@ -20,7 +20,7 @@ paths:
           required: false
           description: Property description to create 
         - in: formData
-          name: steet
+          name: street
           type: string
           required: true
           description: Property street to create 
@@ -41,7 +41,7 @@ paths:
           description: Property country to create   
         - in: formData
           name: price
-          type: float
+          type: number
           required: true
           description: Property price to create 
         - in: formData
@@ -56,7 +56,7 @@ paths:
           description: Property quantity of bathrooms to create 
         - in: formData
           name: area
-          type: float
+          type: number
           required: false
           description: Property area in m^2 to create  
         - in: formData
@@ -70,8 +70,16 @@ paths:
           required: false
           description: Can the property have animals?
         - in: formData
-          name: file
-          type: file
+          name: type
+          type: string
+          required: false
+          description: Property type
+        - in: formData
+          name: files
+          type: array
+          items:
+            type: string
+            format: binary
           required: false
           description: User image to upload
       responses:
@@ -141,7 +149,7 @@ paths:
                 type: string
                 example: <PROPERTY_COUNTRY>
               price: 
-                type: float
+                type: number
                 example: <PROPERTY_PRICE>
               bedrooms: 
                 type: integer
@@ -150,7 +158,7 @@ paths:
                 type: integer
                 example: <PROPERTY_BATHROOMS>
               area: 
-                type: float
+                type: number
                 example: <PROPERTY_AREA>
               place: 
                 type: integer

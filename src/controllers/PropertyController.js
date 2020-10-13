@@ -19,6 +19,8 @@ module.exports = {
       type
     } = req.body
 
+    console.log(req.body)
+    
     Property.create({ user_id, title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type })
       .then((property) => {
         if (!property) {
