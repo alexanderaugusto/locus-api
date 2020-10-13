@@ -30,7 +30,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ["src/doc/*"]
+  apis: ["src/docs/*"]
 }
 
 module.exports = swaggerJsDoc(options)

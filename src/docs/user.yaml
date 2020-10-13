@@ -43,47 +43,33 @@ paths:
         400: 
           description: Invalid data
         500:
-          description: Server error
+          description: Internal server error
 
-  /user/{user_id}:
     get:
       security: 
         - bearerAuth: []
-      description: Used to list a user
+      description: Used to list a authenticated user
       tags:
         - User routes
-      consumes:
-        - application/json
-      parameters:
-        - in: path
-          name: user_id
-          type: integer
-          required: true
-          description: User ID to list   
       responses:
         200: 
           description: OK
         401:
           description: Unauthorized
         400: 
-          description: User no exists
+          description: User not exists
         500:
-          description: Server error
-          
+          description: Internal server error
+        
     put:
       security: 
         - bearerAuth: []
-      description: Used to update a user
+      description: Used to update a authenticated user
       tags:
         - User routes
       consumes:
         - application/json
-      parameters:
-        - in: path
-          name: user_id
-          type: integer
-          required: true
-          description: User ID to update   
+      parameters:  
         - in: body
           name: user
           description: User data to update
@@ -105,30 +91,50 @@ paths:
         401:
           description: Unauthorized
         400: 
-          description: User no exists
+          description: User not exists
         500:
-          description: Server error
+          description: Internal server error
 
     delete:
       security: 
         - bearerAuth: []
-      description: Used to delete a user
+      description: Used to delete a authenticated user
       tags:
         - User routes
       consumes:
-        - application/json
-      parameters:
-        - in: path
-          name: user_id
-          type: integer
-          required: true
-          description: User ID to delete   
+        - application/json  
       responses:
         204: 
           description: OK
         401:
           description: Unauthorized
         400: 
-          description: User no exists
+          description: User not exists
         500:
-          description: Server error
+          description: Internal server error
+
+  /user/avatar:
+    put:
+      security: 
+        - bearerAuth: []
+      description: Used to update a user avatar
+      tags:
+        - User routes
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData  
+          name: file
+          type: file
+          required: false
+          description: User image to upload
+      responses:
+        200: 
+          description: OK
+        401:
+          description: Unauthorized
+        400: 
+          description: Invalid data
+        500:
+          description: Internal server error
+  

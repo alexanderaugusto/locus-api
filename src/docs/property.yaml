@@ -1,0 +1,207 @@
+paths: 
+  /user/property:
+    post:
+      security: 
+        - bearerAuth: []
+      description: Used to create a new property to authenticated user
+      tags:
+        - Property routes
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: title
+          type: string
+          required: true
+          description: Property title to create    
+        - in: formData
+          name: description
+          type: string
+          required: false
+          description: Property description to create 
+        - in: formData
+          name: steet
+          type: string
+          required: true
+          description: Property street to create 
+        - in: formData
+          name: city
+          type: string
+          required: true
+          description: Property city to create  
+        - in: formData
+          name: state
+          type: string
+          required: true
+          description: Property state to create 
+        - in: formData
+          name: country
+          type: string
+          required: true
+          description: Property country to create   
+        - in: formData
+          name: price
+          type: float
+          required: true
+          description: Property price to create 
+        - in: formData
+          name: bedrooms
+          type: integer
+          required: false
+          description: Property quantity of bedrooms to create   
+        - in: formData
+          name: bathrooms
+          type: integer
+          required: false
+          description: Property quantity of bathrooms to create 
+        - in: formData
+          name: area
+          type: float
+          required: false
+          description: Property area in m^2 to create  
+        - in: formData
+          name: place
+          type: integer
+          required: false
+          description: Amount of people that fit in the property  
+        - in: formData
+          name: animal
+          type: boolean
+          required: false
+          description: Can the property have animals?
+        - in: formData
+          name: file
+          type: file
+          required: false
+          description: User image to upload
+      responses:
+        200: 
+          description: OK
+        401:
+          description: Unauthorized
+        400: 
+          description: Invalid data
+        500:
+          description: Internal server error
+
+  /user/{user_id}/properties:
+    get:
+      description: Used to list a user properties
+      tags:
+        - Property routes
+      parameters:
+        - in: path
+          name: user_id
+          type: integer
+          required: true
+          description: User ID to list
+      responses:
+        200: 
+          description: OK
+        400: 
+          description: User not exists
+        500:
+          description: Internal server error
+
+  /user/property/{property_id}:
+    put:
+      security: 
+        - bearerAuth: []
+      description: Used to update the authenticated user property
+      tags:
+        - Property routes
+      parameters:
+        - in: path
+          name: property_id
+          type: integer
+          required: true
+          description: Property ID to update
+        - in: body
+          name: property
+          description: Property data to update
+          schema:
+            type: object  
+            properties:
+              title: 
+                type: string
+                example: <PROPERTY_TITLE>
+              description: 
+                type: string
+                example: <PROPERTY_DESCRIPTION>
+              street: 
+                type: string
+                example: <PROPERTY_STREET>
+              city: 
+                type: string
+                example: <PROPERTY_CITY>
+              state: 
+                type: string
+                example: <PROPERTY_STATE>
+              country: 
+                type: string
+                example: <PROPERTY_COUNTRY>
+              price: 
+                type: float
+                example: <PROPERTY_PRICE>
+              bedrooms: 
+                type: integer
+                example: <PROPERTY_BREDROOMS>
+              bathrooms: 
+                type: integer
+                example: <PROPERTY_BATHROOMS>
+              area: 
+                type: float
+                example: <PROPERTY_AREA>
+              place: 
+                type: integer
+                example: <PROPERTY_PLACE>
+              animal: 
+                type: boolean
+                example: <PROPERTY_ANIMAL>
+              type: 
+                type: string
+                example: <PROPERTY_TYPE>
+      responses:
+        204: 
+          description: OK
+        401:
+          description: Unauthorized
+        400: 
+          description: User not exists
+        500:
+          description: Internal server error
+
+    delete:
+      security: 
+        - bearerAuth: []
+      description: Used to delete the authenticated user property
+      tags:
+        - Property routes
+      parameters:
+        - in: path
+          name: property_id
+          type: integer
+          required: true
+          description: Property ID to delete
+      responses:
+        204: 
+          description: OK
+        401:
+          description: Unauthorized
+        400: 
+          description: User not exists
+        500:
+          description: Internal server error
+
+  /properties:
+    get:
+      description: Used to list all properties
+      tags:
+        - Property routes
+      responses:
+        200: 
+          description: OK
+        500:
+          description: Internal server error
+    
+  
