@@ -43,7 +43,12 @@ module.exports = {
   list: async (req, res) => {
     const { user_id } = req
 
-    User.findByPk(user_id, { include: { association: 'favorites', through: { attributes: [] } } })
+    User.findByPk(user_id, {
+      include: {
+        association: 'favorites', through: { attributes: [] },
+        include: { association: 'images' }
+      }
+    })
       .then((user) => {
         if (!user) {
           return res.status(400).json({
