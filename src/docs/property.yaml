@@ -47,32 +47,32 @@ paths:
         - in: formData
           name: bedrooms
           type: integer
-          required: false
+          required: true
           description: Property quantity of bedrooms to create   
         - in: formData
           name: bathrooms
           type: integer
-          required: false
+          required: true
           description: Property quantity of bathrooms to create 
         - in: formData
           name: area
           type: number
-          required: false
+          required: true
           description: Property area in m^2 to create  
         - in: formData
           name: place
           type: integer
-          required: false
+          required: true
           description: Amount of people that fit in the property  
         - in: formData
           name: animal
           type: boolean
-          required: false
+          required: true
           description: Can the property have animals?
         - in: formData
           name: type
           type: string
-          required: false
+          required: true
           description: Property type
         - in: formData
           name: files
