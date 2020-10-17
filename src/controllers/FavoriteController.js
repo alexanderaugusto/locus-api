@@ -21,50 +21,22 @@ module.exports = {
       })
     }
 
-    user.addFavorite(property)
-      .then((favorite) => {
-        if (!favorite) {
-          return res.status(400).json({
-            cod: 400,
-            msg: 'Ocorreu um erro ao adicionar este imóvel como favorito.'
-          })
-        }
+    const favorite = await user.addFavorite(property)
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao adicionar o imóvel como favorito. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   },
 
   list: async (req, res) => {
     const { user_id } = req
 
-    User.findByPk(user_id, {
+    const user = await User.findByPk(user_id, {
       include: {
         association: 'favorites', through: { attributes: [] },
         include: { association: 'images' }
       }
     })
-      .then((user) => {
-        if (!user) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos listar os favoritos do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
-          })
-        }
 
-        return res.json(user.favorites)
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao listar as propriedades favoritadas pelo usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.json(user.favorites)
   },
 
   delete: async (req, res) => {
@@ -87,22 +59,8 @@ module.exports = {
       })
     }
 
-    user.removeFavorite(property)
-      .then((deleted) => {
-        if (!deleted) {
-          return res.status(400).json({
-            cod: 400,
-            msg: 'O usuário não possui este imóvel como favorito.'
-          })
-        }
+    const deleted = await user.removeFavorite(property)
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao apagar o imóvel dos favoritos. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   },
 }

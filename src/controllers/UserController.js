@@ -1,4 +1,5 @@
 const { User } = require('../models')
+const Yup = require('yup')
 const deleteFile = require('../utils/deleteFile')
 
 module.exports = {
@@ -6,131 +7,118 @@ module.exports = {
     const { email, password, name, cpf, phone } = req.body
     const { key: avatar } = req.file || { key: 'default-avatar.png' }
 
-    User.findOrCreate({
-      where: { email },
-      defaults: { email, password, name, cpf, phone, avatar }
-    })
-      .then(([user, created]) => {
-        if (!created) {
-          return res.status(409).json({
-            cod: 409,
-            msg: 'Este email já foi cadastrado anteriormente.'
-          })
-        }
+    const data = {
+      email,
+      password,
+      name,
+      cpf,
+      phone,
+      avatar
+    }
 
-        return res.json(user)
+    const schema = Yup.object().shape({
+      email: Yup.string().required().email(),
+      password: Yup.string().required(),
+      name: Yup.string().required(),
+      cpf: Yup.string().required(),
+      phone: Yup.string().required(),
+      avatar: Yup.string().required()
+    })
+
+    await schema.validate(data, {
+      abortEarly: false
+    })
+
+    const [user, created] = await User.findOrCreate({
+      where: { email },
+      defaults: data
+    })
+
+    if (!created) {
+      return res.status(409).json({
+        cod: 409,
+        msg: 'Este email já foi cadastrado anteriormente.'
       })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao cadastrar o usuário. Por favor, tentar novamente.'
-        })
-      })
+    }
+
+    return res.json(user)
   },
 
   list: async (req, res) => {
     const { user_id } = req
 
-    User.findByPk(user_id)
-      .then((user) => {
-        if (!user) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos listar este usuário! Por favor, verifique os dados fornecidos e tente novamente.'
-          })
-        }
+    const user = await User.findByPk(user_id)
 
-        return res.json(user)
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao listar o usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.json(user)
   },
 
   update: async (req, res) => {
     const { user_id } = req
     const { name, cpf, phone } = req.body
+    
+    const data = {
+      name,
+      cpf,
+      phone
+    }
 
-    User.update({ name, cpf, phone }, { where: { id: user_id } })
-      .then(([updated]) => {
-        if (!updated) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Os dados fornecidos são inválidos. Por favor, verifique os dados enviados e tente novamente.'
-          })
-        }
+    const schema = Yup.object().shape({
+      name: name === undefined ? null : Yup.string().required(),
+      cpf: cpf === undefined ? null : Yup.string().required(),
+      phone: phone === undefined ? null : Yup.string().required()
+    })
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao atualizar o usuário. Por favor, tentar novamente.'
-        })
-      })
+    await schema.validate(data, {
+      abortEarly: false
+    })
+
+    const [updated] = await User.update(data, { where: { id: user_id } })
+
+    return res.status(204).json()
   },
 
   update_image: async (req, res) => {
     const { user_id } = req
     const { key: avatar } = req.file || { key: undefined }
 
+    const data = {
+      avatar,
+    }
+
+    const schema = Yup.object().shape({
+      avatar: Yup.string().required()
+    })
+
+    await schema.validate(data, {
+      abortEarly: false
+    })
+
+    const [updated] = await User.update(data, { where: { id: user_id } })
+
     const user = await User.findByPk(user_id)
 
-    User.update({ avatar }, { where: { id: user_id } })
-      .then(([updated]) => {
-        if (!updated) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Os dados fornecidos são inválidos. Por favor, verifique os dados enviados e tente novamente.'
-          })
-        }
+    if (avatar && user.avatar !== 'default-avatar.png') {
+      deleteFile('user/' + user.avatar)
+    }
 
-        if (avatar && user.avatar !== 'default-avatar.png') {
-          deleteFile('user/' + user.avatar)
-        }
+    if (avatar) {
+      return res.json({ avatar })
+    }
 
-        if (avatar) {
-          return res.json({ avatar })
-        }
-
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao atualizar a imagem do usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   },
 
   delete: async (req, res) => {
     const { user_id } = req
 
     const user = await User.findByPk(user_id)
+    
+    const deleted = await User.destroy({ where: { id: user_id } })
 
-    User.destroy({ where: { id: user_id } })
-      .then((deleted) => {
-        if (!deleted) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos apagar este usuário. Por favor, tente novamente'
-          })
-        }
+    if (user.avatar !== 'default-avatar.png') {
+      deleteFile('user/' + user.avatar)
+    }
 
-        if (user.avatar !== 'default-avatar.png') {
-          deleteFile('user/' + user.avatar)
-        }
-
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao apagar o usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   }
 }

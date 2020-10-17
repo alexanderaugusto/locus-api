@@ -21,50 +21,22 @@ module.exports = {
       })
     }
 
-    user.addRental(property)
-      .then((rental) => {
-        if (!rental) {
-          return res.status(400).json({
-            cod: 400,
-            msg: 'Ocorreu um erro ao alugar este imóvel para o usuário.'
-          })
-        }
+    const rental = await user.addRental(property)
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao alugar este imóvel para o usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   },
 
   list: async (req, res) => {
-    const { user_id: id } = req
+    const { user_id } = req
 
-    User.findByPk(id, {
+    const user = await User.findByPk(user_id, {
       include: {
         association: 'rentals', through: { attributes: [] },
         include: { association: 'images' }
       }
     })
-      .then((user) => {
-        if (!user) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos listar os alugéis do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
-          })
-        }
 
-        return res.json(user.rentals)
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao listar os aluguéis do usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.json(user.rentals)
   },
 
   delete: async (req, res) => {
@@ -87,22 +59,8 @@ module.exports = {
       })
     }
 
-    user.removeRental(property)
-      .then((deleted) => {
-        if (!deleted) {
-          return res.status(400).json({
-            cod: 400,
-            msg: 'O usuário não tem este imóvel alugado.'
-          })
-        }
+    const deleted = await user.removeRental(property)
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao apagar o imóvel dos aluguéis do usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   }
 }

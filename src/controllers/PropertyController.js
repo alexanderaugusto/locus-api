@@ -1,4 +1,5 @@
 const { User, Property, Image } = require('../models')
+const Yup = require('yup')
 
 module.exports = {
   create: async (req, res) => {
@@ -19,79 +20,73 @@ module.exports = {
       type
     } = req.body
 
-    Property.create({ user_id, title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type })
-      .then((property) => {
-        if (!property) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Os dados fornecidos são inválidos. Por favor, verifique os dados enviados e tente novamente.'
-          })
-        }
+    const data = {
+      user_id,
+      title,
+      description,
+      street,
+      city,
+      state,
+      country,
+      price,
+      bedrooms,
+      bathrooms,
+      area,
+      place,
+      animal,
+      type
+    }
 
-        if (!files.length) {
-          return res.json({ ...property.dataValues, images: [] })
-        }
+    const schema = Yup.object().shape({
+      title: Yup.string().required(),
+      description: Yup.string().optional(),
+      street: Yup.string().required(),
+      city: Yup.string().required(),
+      state: Yup.string().required(),
+      country: Yup.string().required(),
+      price: Yup.number().required(),
+      bedrooms: Yup.number().optional(),
+      bathrooms: Yup.number().optional(),
+      area: Yup.number().optional(),
+      place: Yup.number().optional(),
+      animal: Yup.boolean().optional(),
+      type: Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"])
+    })
 
-        const images = files.map((file) => {
-          return {
-            path: file.key,
-            property_id: property.id
-          }
-        })
+    await schema.validate(data, {
+      abortEarly: false
+    })
 
-        Image.bulkCreate(images)
-          .then((createdImages) => {
-            return res.json({ ...property.dataValues, images: createdImages })
-          })
-          .catch((err) => {
-            return res.json({
-              ...property.dataValues,
-              images: [],
-              message: 'Seu imóvel foi inserido, porém houve um erro ao adicionar as imagens, tente enviá-las novamente.'
-            })
-          })
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao criar um novo imóvel. Por favor, tentar novamente.'
-        })
-      })
+    const property = await Property.create(data)
+
+    if (!files.length) {
+      return res.json({ ...property.dataValues, images: [] })
+    }
+
+    const images = files.map((file) => {
+      return {
+        path: file.key,
+        property_id: property.id
+      }
+    })
+
+    const createdImages = Image.bulkCreate(images)
+
+    return res.json({ ...property.dataValues, images: createdImages })
   },
 
   list: async (req, res) => {
     const { user_id } = req.params
 
-    User.findByPk(user_id, {
-      include: {
-        association: 'properties',
-        include: { association: 'images' }
-      }
-    })
-      .then((user) => {
-        if (!user) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos listar as propriedades do usuário! Por favor, verifique os dados fornecidos e tente novamente.'
-          })
-        }
+    const properties = await Property.findAll({ where: { user_id }, include: { association: 'images' } })
 
-        return res.json(user.properties)
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao listar as propriedades do usuário. Por favor, tentar novamente.'
-        })
-      })
+    return res.json(properties)
   },
 
   update: async (req, res) => {
     const { user_id } = req
     const { property_id } = req.params
-    const { title, description, animal, street, city, state, country, price, bedrooms, bathrooms, area, place, type } = req.body
-
-    Property.update({
+    const {
       title,
       description,
       animal,
@@ -105,65 +100,61 @@ module.exports = {
       area,
       place,
       type
-    }, { where: { id: property_id, user_id } })
-      .then(([updated]) => {
-        if (!updated) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Os dados fornecidos são inválidos. Por favor, verifique os dados enviados e tente novamente.'
-          })
-        }
+    } = req.body
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao atualizar o imóvel. Por favor, tentar novamente.'
-        })
-      })
+    const data = {
+      title,
+      description,
+      street,
+      city,
+      state,
+      country,
+      price,
+      bedrooms,
+      bathrooms,
+      area,
+      place,
+      animal,
+      type
+    }
+
+    const schema = Yup.object().shape({
+      title: title === undefined ? null : Yup.string().required(),
+      description: description === undefined ? null : Yup.string().required(),
+      street: street === undefined ? null : Yup.string().required(),
+      city: city === undefined ? null : Yup.string().required(),
+      state: state === undefined ? null : Yup.string().required(),
+      country: country === undefined ? null : Yup.string().required(),
+      price: price === undefined ? null : Yup.number().required(),
+      bedrooms: bedrooms === undefined ? null : Yup.number().required(),
+      bathrooms: bathrooms === undefined ? null : Yup.number().required(),
+      area: area === undefined ? null : Yup.number().required(),
+      place: place === undefined ? null : Yup.number().required(),
+      animal: animal === undefined ? null : Yup.boolean().required(),
+      type: type === undefined ? null : Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"])
+    })
+
+    await schema.validate(data, {
+      abortEarly: false
+    })
+
+    const [updated] = await Property.update(data, { where: { id: property_id, user_id } })
+
+    return res.status(204).json()
   },
 
   delete: async (req, res) => {
     const { user_id } = req
     const { property_id } = req.params
 
-    Property.destroy({ where: { id: property_id, user_id } })
-      .then((deleted) => {
-        if (!deleted) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos apagar este imóvel. Por favor, tente novamente.'
-          })
-        }
+    const deleted = await Property.destroy({ where: { id: property_id, user_id } })
 
-        return res.status(204).json()
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao apagar o imóvel. Por favor, tentar novamente.'
-        })
-      })
+    return res.status(204).json()
   },
 
   list_all: async (req, res) => {
-    Property.findAll({ include: { association: 'images' } })
-      .then((properties) => {
-        if (!properties) {
-          return res.status(400).json({
-            cod: 400,
-            message: 'Não conseguimos listar as propriedades! Por favor, verifique os dados fornecidos e tente novamente.'
-          })
-        }
+    const properties = await Property.findAll({ include: { association: 'images' } })
 
-        return res.json(properties)
-      })
-      .catch((err) => {
-        return res.status(500).json({
-          cod: 500,
-          msg: 'Ocorreu um erro inesperado ao listar as propriedades. Por favor, tentar novamente.'
-        })
-      })
+    return res.json(properties)
   },
 }
