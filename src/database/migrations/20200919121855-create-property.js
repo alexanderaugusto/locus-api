@@ -37,27 +37,27 @@ module.exports = {
       },
       bedrooms: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false
       },
       bathrooms: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false
       },
       area: {
         type: Sequelize.FLOAT,
-        allowNull: true
+        allowNull: false
       },
       place: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false
       },
       animal: {
         type: Sequelize.BOOLEAN,
-        allowNull: true
+        allowNull: false
       },
       type: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false
       },
       user_id: {
         type: Sequelize.INTEGER,
