@@ -25,6 +25,11 @@ paths:
           required: true
           description: Property street to create 
         - in: formData
+          name: neighborhood
+          type: string
+          required: true
+          description: Property neighborhood to create 
+        - in: formData
           name: city
           type: string
           required: true

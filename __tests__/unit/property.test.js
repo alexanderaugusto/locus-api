@@ -18,6 +18,7 @@ describe("Property test", () => {
         title: "Casa da Prata",
         description: "Esta casa possui vista para o mar e é muito bonita",
         street: "Av. João de Camargo",
+        neighborhood: "Centro",
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
