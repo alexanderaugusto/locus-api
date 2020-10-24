@@ -31,6 +31,7 @@ routes.delete('/user/rental/:property_id', authMiddleware, RentalController.dele
 
 // Property routes
 routes.post('/user/property', authMiddleware, multer(multerConfig('/property')).array('files'), PropertyController.create)
+routes.get('/user/properties', authMiddleware, PropertyController.list)
 routes.get('/user/:user_id/properties', PropertyController.list)
 routes.put('/user/property/:property_id', authMiddleware, PropertyController.update)
 routes.delete('/user/property/:property_id', authMiddleware, PropertyController.delete)
