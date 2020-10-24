@@ -53,6 +53,23 @@ describe("Property test", () => {
     expect(response.body.length).toBe(2)
   })
   
+  it("Should list a autheticated user properties using api route", async () => {
+    const user = await factory.create('User')
+    await factory.create('Property', {
+      user_id: user.id
+    })
+    await factory.create('Property', {
+      user_id: user.id
+    })
+
+    const response = await request(app)
+      .get("/user/properties")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
+
+    expect(response.status).toBe(200)
+    expect(response.body.length).toBe(2)
+  })
+
   it("Should update a user property using api route", async () => {
     const user = await factory.create('User')
     const property = await factory.create('Property', {
