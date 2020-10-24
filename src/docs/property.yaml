@@ -97,6 +97,25 @@ paths:
         500:
           description: Internal server error
 
+  /user/properties:
+    get:
+      security: 
+        - bearerAuth: []
+      description: Used to list a authenticated user properties
+      tags:
+        - Property routes
+      parameters:
+        - in: path
+          name: user_id
+          type: integer
+          required: true
+          description: User ID to list
+      responses:
+        200: 
+          description: OK
+        500:
+          description: Internal server error
+
   /user/{user_id}/properties:
     get:
       description: Used to list a user properties
