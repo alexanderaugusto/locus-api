@@ -104,15 +104,11 @@ paths:
       description: Used to list a authenticated user properties
       tags:
         - Property routes
-      parameters:
-        - in: path
-          name: user_id
-          type: integer
-          required: true
-          description: User ID to list
       responses:
         200: 
           description: OK
+        401:
+          description: Unauthorized
         500:
           description: Internal server error
 
