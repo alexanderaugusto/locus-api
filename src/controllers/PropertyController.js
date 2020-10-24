@@ -79,7 +79,7 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    const { user_id } = req.params || req
+    const user_id  = req.params.user_id || req.user_id
 
     const properties = await Property.findAll({ where: { user_id }, include: { association: 'images' } })
 
