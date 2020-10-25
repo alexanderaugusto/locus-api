@@ -81,6 +81,8 @@ module.exports = {
     const { user_id } = req
     const { key: avatar } = req.file || { key: undefined }
 
+    const user = await User.findByPk(user_id)
+    
     const data = {
       avatar,
     }
@@ -94,8 +96,6 @@ module.exports = {
     })
 
     const [updated] = await User.update(data, { where: { id: user_id } })
-
-    const user = await User.findByPk(user_id)
 
     if (avatar && user.avatar !== 'default-avatar.png') {
       deleteFile('user/' + user.avatar)
