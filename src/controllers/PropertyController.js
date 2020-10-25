@@ -79,7 +79,7 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    const user_id  = req.params.user_id || req.user_id
+    const user_id = req.params.user_id || req.user_id
 
     const properties = await Property.findAll({ where: { user_id }, include: { association: 'images' } })
 
@@ -159,7 +159,31 @@ module.exports = {
   },
 
   list_all: async (req, res) => {
+    const { user_id } = req
+
     const properties = await Property.findAll({ include: { association: 'images' } })
+
+    let favorites = []
+
+    if (user_id) {
+      const user = await User.findByPk(user_id, {
+        include: {
+          association: 'favorites', through: { attributes: [] },
+          include: { association: 'images' }
+        }
+      })
+
+      favorites = user.favorites
+    }
+    
+    properties.forEach((property) => {
+      if (!favorites.every((favorite) => favorite.id !== property.id)) {
+        property.dataValues.favorite = true
+      } else {
+
+        property.dataValues.favorite = false
+      }
+    })
 
     return res.json(properties)
   },
