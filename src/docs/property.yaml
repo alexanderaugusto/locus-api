@@ -223,6 +223,8 @@ paths:
 
   /properties:
     get:
+      security: 
+        - bearerAuth: []
       description: Used to list all properties
       tags:
         - Property routes

@@ -1,6 +1,6 @@
 const { verifyJwt } = require('../utils/auth')
 
-module.exports = (req, res, next) => {
+const authRequired = (req, res, next) => {
   const authHeader = req.headers.authorization
 
   if (!authHeader) {
@@ -40,4 +40,39 @@ module.exports = (req, res, next) => {
 
     return next()
   })
+}
+
+const authOptional = (req, res, next) => {
+  const authHeader = req.headers.authorization
+
+  if (!authHeader) {
+    return next()
+  }
+
+  const parts = authHeader.split(' ')
+
+  if (!parts.length === 2) {
+    return next()
+  }
+
+  const [scheme, token] = parts
+
+  if (!/^Bearer$/i.test(scheme)) {
+    return next()
+  }
+
+  verifyJwt(token, (err, decoded) => {
+    if (err) {
+      return next()
+    }
+
+    req.user_id = decoded.id
+
+    return next()
+  })
+}
+
+module.exports = {
+  required: authRequired,
+  optional: authOptional
 }
