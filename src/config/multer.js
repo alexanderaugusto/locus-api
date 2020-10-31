@@ -50,6 +50,7 @@ module.exports = (folder) => {
     fileFilter: (req, file, cb) => {
       const allowedMimes = [
         "image/jpeg",
+        "image/jpg",
         "image/pjpeg",
         "image/png",
         "image/webp"
