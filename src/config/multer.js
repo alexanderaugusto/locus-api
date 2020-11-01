@@ -43,7 +43,7 @@ module.exports = (folder) => {
 
   return {
     dest: path.resolve(__dirname, "../../tmp/uploads"),
-    storage: storageTypes[process.env.STORAGE_TYPE](folder),
+    storage: storageTypes[process.env.STORAGE_TYPE || "local"](folder),
     limits: {
       fileSize: size * 1024 * 1024
     },

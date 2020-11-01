@@ -10,13 +10,13 @@ const comparePassword = (password1, password2) => {
 }
 
 const generateJwt = (params) => {
-  return jwt.sign(params, process.env.AUTH_SECRET, {
+  return jwt.sign(params, process.env.AUTH_SECRET || "default-secret", {
     expiresIn: 172800
   })
 }
 
 const verifyJwt = (token, cb) => {
-  return jwt.verify(token, process.env.AUTH_SECRET, cb)
+  return jwt.verify(token, process.env.AUTH_SECRET || "default-secret", cb)
 }
 
 module.exports = {
