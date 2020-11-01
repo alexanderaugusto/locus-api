@@ -2,12 +2,12 @@ require('dotenv').config()
 
 const dbConfig = {
   development: {
-    username: "root",
-    password: "root",
-    database: "imovel",
-    host: "localhost",
-    port: "3306",
-    dialect: "mysql",
+    username: process.env.DEV_DB_USERNAME,
+    password: process.env.DEV_DB_PASSWORD,
+    database: process.env.DEV_DB_NAME,
+    host: process.env.DEV_DB_HOSTNAME,
+    port: process.env.DEV_DB_PORT,
+    dialect: process.env.DEV_DB_TYPE,
     timezoze: "-03:00"
   },
   test: {
