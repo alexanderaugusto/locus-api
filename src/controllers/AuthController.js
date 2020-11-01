@@ -24,5 +24,16 @@ module.exports = {
     user.dataValues.token = generateJwt({ id: user.id })
 
     return res.json(user)
+  },
+
+  renew_token: async (req, res) => {
+    const { user_id } = req
+
+    let user = await User.findByPk(user_id)
+
+    delete user.dataValues.password
+    user.dataValues.token = generateJwt({ id: user_id })
+
+    return res.json(user)
   }
 }

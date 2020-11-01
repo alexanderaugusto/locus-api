@@ -29,3 +29,20 @@ paths:
           description: Email or password incorrects
         500:
           description: Server error
+
+  /auth/renew:
+    put:
+      security: 
+        - bearerAuth: []
+      description: Used to renew user authentication
+      tags:
+        - Authentication routes
+      consumes:
+        - application/json
+      responses:
+        200: 
+          description: OK
+        401:
+          description: Unauthorized
+        500:
+          description: Server error

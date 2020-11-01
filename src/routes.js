@@ -11,6 +11,7 @@ const UserController = require('./controllers/UserController')
 
 // Authentication routes
 routes.post('/auth/login', AuthController.login)
+routes.put('/auth/renew', authMiddleware.required, AuthController.renew_token)
 
 // User routes
 routes.post('/user', multer(multerConfig('/user')).single('file'), UserController.create)
