@@ -37,5 +37,6 @@ routes.get('/user/:user_id/properties', authMiddleware.required, PropertyControl
 routes.put('/user/property/:property_id', authMiddleware.required, PropertyController.update)
 routes.delete('/user/property/:property_id', authMiddleware.required, PropertyController.delete)
 routes.get('/properties', authMiddleware.optional, PropertyController.list_all)
+routes.post('/user/property/:property_id/contact', authMiddleware.required, PropertyController.contact)
 
 module.exports = routes

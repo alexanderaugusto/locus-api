@@ -1,5 +1,6 @@
 const { User, Property, Image } = require('../models')
 const Yup = require('yup')
+const mailer = require('../config/mailer')
 
 module.exports = {
   create: async (req, res) => {
@@ -175,7 +176,7 @@ module.exports = {
 
       favorites = user.favorites
     }
-    
+
     properties.forEach((property) => {
       if (!favorites.every((favorite) => favorite.id !== property.id)) {
         property.dataValues.favorite = true
@@ -187,4 +188,33 @@ module.exports = {
 
     return res.json(properties)
   },
+
+  contact: async (req, res) => {
+    const { user_id } = req
+    const { property_id } = req.params
+
+    const user = await User.findByPk(user_id)
+    const property = await Property.findByPk(property_id, {
+      include: [
+        { association: 'images' },
+        { association: 'owner' }
+      ]
+    })
+
+    console.log(JSON.parse(JSON.stringify(property)))
+
+    const result = await mailer().sendMail({
+      to: user.email,
+      from: process.env.MAILER_CONTACT_EMAIL,
+      subject: 'IMovel - Um usuário tem interesse em seu imóvel',
+      template: 'contact'
+    }, err => {
+      if (err) {
+        console.log(err)
+        return res.status(500).json(err)
+      }
+
+      return res.json(result)
+    })
+  }
 }
