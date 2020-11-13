@@ -193,7 +193,7 @@ module.exports = {
     const { user_id } = req
     const { property_id } = req.params
 
-    const user = await User.findByPk(user_id)
+    // const user = await User.findByPk(user_id)
     const property = await Property.findByPk(property_id, {
       include: [
         { association: 'images' },
@@ -201,20 +201,13 @@ module.exports = {
       ]
     })
 
-    console.log(JSON.parse(JSON.stringify(property)))
-
     const result = await mailer().sendMail({
-      to: user.email,
+      to: property.owner.email,
       from: process.env.MAILER_CONTACT_EMAIL,
       subject: 'IMovel - Um usuário tem interesse em seu imóvel',
       template: 'contact'
-    }, err => {
-      if (err) {
-        console.log(err)
-        return res.status(500).json(err)
-      }
-
-      return res.json(result)
     })
+
+    return res.json(result)
   }
 }
