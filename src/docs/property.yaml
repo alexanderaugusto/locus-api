@@ -233,5 +233,28 @@ paths:
           description: OK
         500:
           description: Internal server error
+
+  /user/property/{property_id}/contact:
+    post:
+      security: 
+        - bearerAuth: []
+      description: Used send a contact to property owner
+      tags:
+        - Property routes
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: path
+          name: property_id
+          type: integer
+          required: true
+          description: Property ID to send email   
+      responses:
+        200: 
+          description: OK
+        401:
+          description: Unauthorized
+        500:
+          description: Internal server error
     
   
