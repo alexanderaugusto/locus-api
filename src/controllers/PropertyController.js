@@ -193,7 +193,7 @@ module.exports = {
     const { user_id } = req
     const { property_id } = req.params
 
-    // const user = await User.findByPk(user_id)
+    const user = await User.findByPk(user_id)
     const property = await Property.findByPk(property_id, {
       include: [
         { association: 'images' },
@@ -205,7 +205,15 @@ module.exports = {
       to: property.owner.email,
       from: process.env.MAILER_CONTACT_EMAIL,
       subject: 'IMovel - Um usuário tem interesse em seu imóvel',
-      template: 'contact'
+      template: 'contact',
+      context: {
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        title: property.title,
+        image: property.images[0].path,
+        owner: property.owner.name
+      }
     })
 
     return res.json(result)
