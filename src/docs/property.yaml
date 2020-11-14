@@ -242,13 +242,18 @@ paths:
       tags:
         - Property routes
       consumes:
-        - multipart/form-data
+        - application/json
       parameters:
         - in: path
           name: property_id
           type: integer
           required: true
-          description: Property ID to send email   
+          description: Property ID to send email 
+        - in: body
+          name: message
+          type: string
+          required: false
+          description: User message  
       responses:
         200: 
           description: OK

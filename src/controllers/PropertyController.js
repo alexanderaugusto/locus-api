@@ -192,6 +192,7 @@ module.exports = {
   contact: async (req, res) => {
     const { user_id } = req
     const { property_id } = req.params
+    const { message } = req.body
 
     const user = await User.findByPk(user_id)
     const property = await Property.findByPk(property_id, {
@@ -212,7 +213,8 @@ module.exports = {
         phone: user.phone,
         title: property.title,
         image: property.images[0].path,
-        owner: property.owner.name
+        owner: property.owner.name,
+        message
       }
     })
 
