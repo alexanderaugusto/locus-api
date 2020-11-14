@@ -251,9 +251,15 @@ paths:
           description: Property ID to send email 
         - in: body
           name: message
-          type: string
-          required: false
-          description: User message  
+          description: User message to send to email
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message: 
+                type: string
+                example: <YOUR_MESSAGE>
       responses:
         200: 
           description: OK
