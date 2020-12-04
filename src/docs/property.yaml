@@ -234,7 +234,7 @@ paths:
         500:
           description: Internal server error
 
-  /user/property/{property_id}/contact:
+  /user/property/{property_id}/owner/contact:
     post:
       security: 
         - bearerAuth: []

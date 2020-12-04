@@ -82,7 +82,10 @@ module.exports = {
   list: async (req, res) => {
     const user_id = req.params.user_id || req.user_id
 
-    const properties = await Property.findAll({ where: { user_id }, include: { association: 'images' } })
+    const properties = await Property.findAll({
+      where: { user_id },
+      include: [{ association: 'images' }, { association: 'owner' }]
+    })
 
     return res.json(properties)
   },
@@ -162,7 +165,9 @@ module.exports = {
   list_all: async (req, res) => {
     const { user_id } = req
 
-    const properties = await Property.findAll({ include: { association: 'images' } })
+    const properties = await Property.findAll({
+      include: [{ association: 'images' }, { association: 'owner' }]
+    })
 
     let favorites = []
 
