@@ -1,4 +1,4 @@
-const { User, Property, Image } = require('../models')
+const { User, Property, Image, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
 
@@ -164,9 +164,23 @@ module.exports = {
 
   list_all: async (req, res) => {
     const { user_id } = req
+    const { price, bedrooms, bathrooms, area, place, animal, type } = req.query
+
+    const filter = {
+      price: { [Sequelize.Op.between]: price && JSON.parse(price) },
+      bedrooms: bedrooms && parseInt(bedrooms, 10),
+      bathrooms: bathrooms && parseInt(bathrooms, 10),
+      area: { [Sequelize.Op.between]: area && JSON.parse(area) },
+      place: place && parseInt(place, 10),
+      animal: animal && JSON.parse(animal),
+      type
+    }
+
+    Object.entries(filter).forEach(([key]) => req.query[key] === undefined && delete filter[key])
 
     const properties = await Property.findAll({
-      include: [{ association: 'images' }, { association: 'owner' }]
+      include: [{ association: 'images' }, { association: 'owner' }],
+      where: filter
     })
 
     let favorites = []

@@ -228,6 +228,42 @@ paths:
       description: Used to list all properties
       tags:
         - Property routes
+      parameters:
+        - in: query
+          name: price
+          type: json
+          required: false
+          description: price range to filter
+        - in: query
+          name: bedrooms
+          type: integer
+          required: false
+          description: bedrooms quantity to filter
+        - in: query
+          name: bathrooms
+          type: integer
+          required: false
+          description: bathrooms quantity to filter
+        - in: query
+          name: area
+          type: json
+          required: false
+          description: area range to filter
+        - in: query
+          name: place
+          type: integer
+          required: false
+          description: total of places to filter
+        - in: query
+          name: animal
+          type: boolean
+          required: false
+          description: has animal or not
+        - in: query
+          name: type
+          type: string
+          required: false
+          description: property type to filter
       responses:
         200: 
           description: OK
