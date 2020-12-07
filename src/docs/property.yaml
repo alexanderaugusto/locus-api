@@ -261,9 +261,9 @@ paths:
           description: has animal or not
         - in: query
           name: type
-          type: string
+          type: json
           required: false
-          description: property type to filter
+          description: property types to filter
       responses:
         200: 
           description: OK

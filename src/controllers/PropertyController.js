@@ -164,16 +164,16 @@ module.exports = {
 
   list_all: async (req, res) => {
     const { user_id } = req
-    const { price, bedrooms, bathrooms, area, place, animal, type } = req.query
+    const { price, bedrooms, bathrooms, area, place, animal, type } = JSON.parse(JSON.stringify(req.query))
 
     const filter = {
-      price: { [Sequelize.Op.between]: price && JSON.parse(price) },
+      price: { [Sequelize.Op.between]: price && JSON.parse(JSON.stringify(price)) },
       bedrooms: bedrooms && parseInt(bedrooms, 10),
       bathrooms: bathrooms && parseInt(bathrooms, 10),
-      area: { [Sequelize.Op.between]: area && JSON.parse(area) },
+      area: { [Sequelize.Op.between]: area && JSON.parse(JSON.stringify(area)) },
       place: place && parseInt(place, 10),
       animal: animal && JSON.parse(animal),
-      type
+      type: type &&JSON.parse(JSON.stringify(type))
     }
 
     Object.entries(filter).forEach(([key]) => req.query[key] === undefined && delete filter[key])
