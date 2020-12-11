@@ -213,6 +213,8 @@ As seguintes ferramentas foram usadas na construção do projeto:
   -   **[jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)**
   -   **[multer](https://www.npmjs.com/package/multer)**
   -   **[multer-storage-cloudinary](https://www.npmjs.com/package/multer-storage-cloudinary)**
+  -   **[nodemailer](https://www.npmjs.com/package/nodemailer)**
+  -   **[nodemailer-express-handlebars](https://www.npmjs.com/package/nodemailer-express-handlebars)**
   -   **[mysql2](https://www.npmjs.com/package/mysql2)**
   -   **[pg](https://node-postgres.com/)**
   -   **[pg-hstore](https://www.npmjs.com/package/pg-hstore)**
