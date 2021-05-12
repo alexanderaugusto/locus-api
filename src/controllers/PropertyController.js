@@ -90,6 +90,16 @@ module.exports = {
     return res.json(properties)
   },
 
+  list_one: async (req, res) => {
+    const property_id = req.params.property_id
+
+    const property = await Property.findByPk(property_id, {
+      include: [{ association: 'images' }, { association: 'owner' }]
+    })
+
+    return res.json(property)
+  },
+
   update: async (req, res) => {
     const { user_id } = req
     const { property_id } = req.params

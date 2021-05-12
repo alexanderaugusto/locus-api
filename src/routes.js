@@ -33,7 +33,8 @@ routes.delete('/user/rental/:property_id', authMiddleware.required, RentalContro
 // Property routes
 routes.post('/user/property', authMiddleware.required, multer(multerConfig('/property')).array('files'), PropertyController.create)
 routes.get('/user/properties', authMiddleware.required, PropertyController.list)
-routes.get('/user/:user_id/properties', authMiddleware.required, PropertyController.list)
+routes.get('/user/:user_id/properties', authMiddleware.optional, PropertyController.list)
+routes.get('/user/property/:property_id', authMiddleware.optional, PropertyController.list_one)
 routes.put('/user/property/:property_id', authMiddleware.required, PropertyController.update)
 routes.delete('/user/property/:property_id', authMiddleware.required, PropertyController.delete)
 routes.get('/properties', authMiddleware.optional, PropertyController.list_all)
