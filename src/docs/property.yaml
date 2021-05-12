@@ -132,6 +132,21 @@ paths:
           description: Internal server error
 
   /user/property/{property_id}:
+    get:
+      description: Used to list one property
+      tags:
+        - Property routes
+      parameters:
+        - in: path
+          name: property_id
+          type: integer
+          required: true
+          description: Property ID to list
+      responses:
+        200: 
+          description: OK
+        500:
+          description: Internal server error
     put:
       security: 
         - bearerAuth: []
