@@ -37,9 +37,10 @@ Esta API também está hospedada no [Heroku](https://dashboard.heroku.com/) no e
 
 ## 🚀 Como executar o projeto
 
-Este projeto é divido em duas partes:
-1. [Backend](Neste repositório)
-2. [Fontend](https://github.com/alexanderaugusto/imovel-app.git)
+Este projeto é dividido em três partes:
+1. [Frontend - Mobile](https://github.com/alexanderaugusto/imovel-app.git)
+2. [Frontend - Web](https://github.com/alexanderaugusto/imovel-web.git)
+3. Backend (Neste repositório)
 
 ### Pré-requisitos
 
