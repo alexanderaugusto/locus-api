@@ -15,26 +15,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true
       },
-      street: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      neighborhood: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      city: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      state: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      country: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       price: {
         type: Sequelize.FLOAT,
         allowNull: false
@@ -55,6 +35,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      garage: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       animal: {
         type: Sequelize.BOOLEAN,
         allowNull: false
@@ -67,6 +51,13 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { model: 'User', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      address_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'Address', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
