@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Property.associate = (models) => {
     Property.belongsTo(models.User, { foreignKey: 'user_id', as: 'owner' })
+    Property.hasOne(models.Address, { foreignKey: 'address_id', as: 'address' })
     Property.belongsToMany(models.User, { foreignKey: 'property_id', through: models.Favorite, as: 'favorite_users' })
     Property.belongsToMany(models.User, { foreignKey: 'property_id', through: models.Rental, as: 'rental_user' })
     Property.hasMany(models.Image, { foreignKey: 'property_id', as: 'images' })
