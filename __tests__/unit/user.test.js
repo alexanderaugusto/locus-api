@@ -52,6 +52,57 @@ describe("User test", () => {
     expect(response.body.id).toBe(user.id)
   })
 
+  it("Should list user properties using api route", async () => {
+    const user = await factory.create('User')
+    await factory.create('Property', {
+      user_id: user.id
+    })
+    await factory.create('Property', {
+      user_id: user.id
+    })
+
+    const response = await request(app)
+      .get("/user/" + user.id + "/properties")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
+
+    expect(response.status).toBe(200)
+    expect(response.body.length).toBe(2)
+  })
+  
+  it("Should list a autheticated user properties using api route", async () => {
+    const user = await factory.create('User')
+    await factory.create('Property', {
+      user_id: user.id
+    })
+    await factory.create('Property', {
+      user_id: user.id
+    })
+
+    const response = await request(app)
+      .get("/user/properties")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
+
+    expect(response.status).toBe(200)
+    expect(response.body.length).toBe(2)
+  })
+  
+  it("Should list user favorites using api route", async () => {
+    const user = await factory.create('User')
+    await factory.create('Favorite', {
+      user_id: user.id
+    })
+    await factory.create('Favorite', {
+      user_id: user.id
+    })
+
+    const response = await request(app)
+      .get("/user/favorites")
+      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
+
+    expect(response.status).toBe(200)
+    expect(response.body.length).toBe(2)
+  })
+
   it("Should update a user using api route", async () => {
     const user = await factory.create('User')
 

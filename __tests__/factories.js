@@ -2,12 +2,24 @@ const { factory } = require('factory-girl')
 const faker = require('faker')
 
 const {
+  Address,
   User,
   Property,
   Image,
   Rental,
   Favorite
 } = require('../src/models')
+
+factory.define('Address', Address, {
+  street: "Av. João de Camargo",
+  neighborhood: "Centro",
+  city: "Santa Rita do Sapucaí",
+  state: "MG",
+  country: "Brasil",
+  zipcode: "37540-000",
+  latitude: "-22.2569742",
+  longitude: "-45.6994959"
+})
 
 factory.define('User', User, {
   email: faker.internet.email,
@@ -32,10 +44,15 @@ factory.define('Property', Property, {
   bathrooms: 1,
   area: 35,
   place: 3,
+  garage: 1,
   type: "Apartamento",
   user_id: async () => {
     const user = await factory.create('User')
     return user.id
+  },
+  address_id: async () => {
+    const address = await factory.create('Address')
+    return address.id
   }
 })
 

@@ -13,61 +13,33 @@ describe("Property test", () => {
     const user = await factory.create('User')
 
     const response = await request(app)
-      .post("/user/property")
+      .post("/property")
       .send({
-        title: "Casa da Prata",
+        title: "Casa da Praia",
         description: "Esta casa possui vista para o mar e é muito bonita",
-        street: "Av. João de Camargo",
-        neighborhood: "Centro",
-        city: "Santa Rita do Sapucaí",
-        state: "MG",
-        country: "Brasil",
         price: 1450.00,
         bedrooms: 3,
         bathrooms: 1,
         area: 40,
         place: 3,
+        garage: 1,
         animal: true,
-        type: "Casa"
+        type: "Casa",
+        address: {
+          street: "Av. João de Camargo",
+          neighborhood: "Centro",
+          city: "Santa Rita do Sapucaí",
+          state: "MG",
+          country: "Brasil",
+          zipcode: "37540-000",
+          latitude: "-22.2569742",
+          longitude: "-45.6994959"
+        }
       })
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(200)
     expect(response.body.user_id).toBe(user.id)
-  })
-
-  it("Should list user properties using api route", async () => {
-    const user = await factory.create('User')
-    await factory.create('Property', {
-      user_id: user.id
-    })
-    await factory.create('Property', {
-      user_id: user.id
-    })
-
-    const response = await request(app)
-      .get("/user/" + user.id + "/properties")
-      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body.length).toBe(2)
-  })
-  
-  it("Should list a autheticated user properties using api route", async () => {
-    const user = await factory.create('User')
-    await factory.create('Property', {
-      user_id: user.id
-    })
-    await factory.create('Property', {
-      user_id: user.id
-    })
-
-    const response = await request(app)
-      .get("/user/properties")
-      .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
-
-    expect(response.status).toBe(200)
-    expect(response.body.length).toBe(2)
   })
 
   it("Should update a user property using api route", async () => {
@@ -77,7 +49,7 @@ describe("Property test", () => {
     })
 
     const response = await request(app)
-      .put("/user/property/" + property.id)
+      .put("/property/" + property.id)
       .send({
         area: 40,
         price: 1200.00
@@ -94,7 +66,7 @@ describe("Property test", () => {
     })
 
     const response = await request(app)
-      .delete("/user/property/" + property.id)
+      .delete("/property/" + property.id)
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
