@@ -6,7 +6,6 @@ const authMiddleware = require('./middleware/auth')
 const AuthController = require('./controllers/AuthController')
 const FavoriteController = require('./controllers/FavoriteController')
 const PropertyController = require('./controllers/PropertyController')
-const RentalController = require('./controllers/RentalController')
 const UserController = require('./controllers/UserController')
 
 // Authentication routes
@@ -24,11 +23,6 @@ routes.delete('/user', authMiddleware.required, UserController.delete)
 routes.put('/user/favorite/:property_id', authMiddleware.required, FavoriteController.add)
 routes.get('/user/favorites', authMiddleware.required, FavoriteController.list)
 routes.delete('/user/favorite/:property_id', authMiddleware.required, FavoriteController.delete)
-
-// Rental routes
-routes.put('/user/rental/:property_id', authMiddleware.required, RentalController.add)
-routes.get('/user/rentals', authMiddleware.required, RentalController.list)
-routes.delete('/user/rental/:property_id', authMiddleware.required, RentalController.delete)
 
 // Property routes
 routes.post('/user/property', authMiddleware.required, multer(multerConfig('/property')).array('files'), PropertyController.create)
