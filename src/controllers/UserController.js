@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Property } = require('../models')
 const Yup = require('yup')
 const deleteFile = require('../utils/deleteFile')
 
@@ -52,6 +52,30 @@ module.exports = {
     return res.json(user)
   },
 
+  list_properties: async (req, res) => {
+    const user_id = req.params.user_id || req.user_id
+
+    const userProperties = await Property.findAll({
+      where: { user_id },
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
+    })
+
+    return res.json(userProperties)
+  },
+
+  list_favorites: async (req, res) => {
+    const { user_id } = req
+
+    const user = await User.findByPk(user_id, {
+      include: {
+        association: 'favorites', through: { attributes: [] },
+        include: [{ association: 'images' }, { association: 'owner' }]
+      }
+    })
+
+    return res.json(user.favorites)
+  },
+
   update: async (req, res) => {
     const { user_id } = req
     const { name, cpf, phone } = req.body
@@ -84,7 +108,7 @@ module.exports = {
     const user = await User.findByPk(user_id)
     
     const data = {
-      avatar,
+      avatar
     }
 
     const schema = Yup.object().shape({

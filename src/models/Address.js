@@ -5,12 +5,15 @@ module.exports = (sequelize, DataTypes) => {
     number: DataTypes.INTEGER,
     city: DataTypes.STRING,
     state: DataTypes.STRING,
-    country: DataTypes.STRING
+    country: DataTypes.STRING,
+    zipcode: DataTypes.STRING,
+    latitude: DataTypes.STRING,
+    longitude: DataTypes.STRING
   })
 
   Address.associate = (models) => {
-    Address.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' })
-    Address.belongsTo(models.User, { foreignKey: 'property_id', as: 'property' })
+    Address.hasOne(models.User, { foreignKey: 'address_id', as: 'user' })
+    Address.hasOne(models.Property, { foreignKey: 'address_id', as: 'property' })
   }
   
   return Address

@@ -10,6 +10,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -20,6 +23,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -30,6 +36,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -40,6 +49,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -50,6 +62,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -60,6 +75,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -70,6 +88,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -80,6 +101,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -90,6 +114,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -100,6 +127,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -110,6 +140,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -120,6 +153,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -130,6 +166,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -140,6 +179,9 @@ module.exports = {
         city: "Santa Rita do Sapucaí",
         state: "MG",
         country: "Brasil",
+        zipcode: "37540-000",
+        latitude: "-22.2569742",
+        longitude: "-45.6994959",
         created_at: new Date(),
         updated_at: new Date()
       }

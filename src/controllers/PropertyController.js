@@ -1,4 +1,4 @@
-const { User, Property, Image, Sequelize } = require('../models')
+const { User, Property, Image, Address, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
 
@@ -8,46 +8,35 @@ module.exports = {
     const {
       title,
       description,
-      street,
-      neighborhood,
-      city,
-      state,
-      country,
       price,
       bedrooms,
       bathrooms,
       area,
       place,
+      garage = 0,
       animal,
-      type
+      type,
+      address
     } = req.body
 
     const data = {
       user_id,
       title,
       description,
-      street,
-      neighborhood,
-      city,
-      state,
-      country,
       price,
       bedrooms,
       bathrooms,
       area,
       place,
+      garage,
       animal,
-      type
+      type,
+      address
     }
 
     const schema = Yup.object().shape({
       title: Yup.string().required(),
       description: Yup.string().optional(),
-      street: Yup.string().required(),
-      neighborhood: Yup.string().required(),
-      city: Yup.string().required(),
-      state: Yup.string().required(),
-      country: Yup.string().required(),
       price: Yup.number().required(),
       bedrooms: Yup.number().optional(),
       bathrooms: Yup.number().optional(),
@@ -61,40 +50,35 @@ module.exports = {
       abortEarly: false
     })
 
+    const createdAddress = await Address.create(address)
+    data.address_id = createdAddress.id
+
     const property = await Property.create(data)
+
+    property.dataValues.address = createdAddress
 
     if (!files.length) {
       return res.json({ ...property.dataValues, images: [] })
+    } else {
+      const images = files.map((file) => {
+        return {
+          path: file.key,
+          property_id: property.id
+        }
+      })
+
+      const createdImages = await Image.bulkCreate(images)
+      property.dataValues.images = createdImages
     }
 
-    const images = files.map((file) => {
-      return {
-        path: file.key,
-        property_id: property.id
-      }
-    })
-
-    const createdImages = Image.bulkCreate(images)
-
-    return res.json({ ...property.dataValues, images: createdImages })
+    return res.json(property)
   },
 
   list: async (req, res) => {
-    const user_id = req.params.user_id || req.user_id
-
-    const properties = await Property.findAll({
-      where: { user_id },
-      include: [{ association: 'images' }, { association: 'owner' }]
-    })
-
-    return res.json(properties)
-  },
-
-  list_one: async (req, res) => {
     const property_id = req.params.property_id
 
     const property = await Property.findByPk(property_id, {
-      include: [{ association: 'images' }, { association: 'owner' }]
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
     })
 
     return res.json(property)
@@ -107,32 +91,24 @@ module.exports = {
       title,
       description,
       animal,
-      street,
-      neighborhood,
-      city,
-      state,
-      country,
       price,
       bedrooms,
       bathrooms,
       area,
       place,
+      garage,
       type
     } = req.body
 
     const data = {
       title,
       description,
-      street,
-      neighborhood,
-      city,
-      state,
-      country,
       price,
       bedrooms,
       bathrooms,
       area,
       place,
+      garage,
       animal,
       type
     }
@@ -140,16 +116,12 @@ module.exports = {
     const schema = Yup.object().shape({
       title: title === undefined ? null : Yup.string().required(),
       description: description === undefined ? null : Yup.string().required(),
-      street: street === undefined ? null : Yup.string().required(),
-      neighborhood: neighborhood === undefined ? null : Yup.string().required(),
-      city: city === undefined ? null : Yup.string().required(),
-      state: state === undefined ? null : Yup.string().required(),
-      country: country === undefined ? null : Yup.string().required(),
       price: price === undefined ? null : Yup.number().required(),
       bedrooms: bedrooms === undefined ? null : Yup.number().required(),
       bathrooms: bathrooms === undefined ? null : Yup.number().required(),
       area: area === undefined ? null : Yup.number().required(),
       place: place === undefined ? null : Yup.number().required(),
+      garage: garage === undefined ? null : Yup.number().required(),
       animal: animal === undefined ? null : Yup.boolean().required(),
       type: type === undefined ? null : Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"])
     })
@@ -183,13 +155,13 @@ module.exports = {
       area: { [Sequelize.Op.between]: area && JSON.parse(JSON.stringify(area)) },
       place: place && parseInt(place, 10),
       animal: animal && JSON.parse(animal),
-      type: type &&JSON.parse(JSON.stringify(type))
+      type: type && JSON.parse(JSON.stringify(type))
     }
 
     Object.entries(filter).forEach(([key]) => req.query[key] === undefined && delete filter[key])
 
     const properties = await Property.findAll({
-      include: [{ association: 'images' }, { association: 'owner' }],
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }],
       where: filter
     })
 
@@ -241,7 +213,7 @@ module.exports = {
         email: user.email,
         phone: user.phone,
         title: property.title,
-        image: property.images[0].path,
+        image: property.images.length ? property.images[0].path : "",
         owner: property.owner.name,
         message
       }

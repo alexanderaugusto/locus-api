@@ -31,6 +31,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      zipcode: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      latitude: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      longitude: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false

@@ -26,19 +26,6 @@ module.exports = {
     return res.status(204).json()
   },
 
-  list: async (req, res) => {
-    const { user_id } = req
-
-    const user = await User.findByPk(user_id, {
-      include: {
-        association: 'favorites', through: { attributes: [] },
-        include: [{ association: 'images' }, { association: 'owner' }]
-      }
-    })
-
-    return res.json(user.favorites)
-  },
-
   delete: async (req, res) => {
     const { user_id } = req
     const { property_id } = req.params
