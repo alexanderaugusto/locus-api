@@ -1,0 +1,457 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "IMovel API",
+    "description": "IMovel API information",
+    "contact": {
+      "name": "Alexander Augusto",
+      "email": "alexaasf1010@gmail.com",
+      "url": "https://alexanderaugusto.com/"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Endpoints"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to do a login",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "402": {
+            "description": "Payment Required"
+          }
+        }
+      }
+    },
+    "/auth/renew": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to renew user token",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to create a new user",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "cpf": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to list an authenticated user",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to update an user",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "cpf": {
+                  "example": "any"
+                },
+                "phone": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to delete an authenticated user",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/user/properties": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to list user properties",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user/{user_id}/properties": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to list user properties",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/user/favorites": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint list user favorite properties",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user/avatar": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to update user avatar",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/property": {
+      "post": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint to create a new property",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "price": {
+                  "example": "any"
+                },
+                "bedrooms": {
+                  "example": "any"
+                },
+                "bathrooms": {
+                  "example": "any"
+                },
+                "area": {
+                  "example": "any"
+                },
+                "place": {
+                  "example": "any"
+                },
+                "garage": {
+                  "example": "any"
+                },
+                "animal": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/property/{property_id}/owner/contact": {
+      "post": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint enter to enter in contact with property owner",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/property/{property_id}": {
+      "get": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint to list a property by id",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint to update a property",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "animal": {
+                  "example": "any"
+                },
+                "price": {
+                  "example": "any"
+                },
+                "bedrooms": {
+                  "example": "any"
+                },
+                "bathrooms": {
+                  "example": "any"
+                },
+                "area": {
+                  "example": "any"
+                },
+                "place": {
+                  "example": "any"
+                },
+                "garage": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint to delete a property",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/properties": {
+      "get": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint to list all properties",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/property/favorite/{property_id}": {
+      "put": {
+        "tags": [
+          "Favorite Property"
+        ],
+        "description": "Endpoint to favoite a property",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Favorite Property"
+        ],
+        "description": "Endpoint delete property from favorites",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "servers": {
+    "url": "http://localhost:5000",
+    "description": "This is the development API"
+  }
+}

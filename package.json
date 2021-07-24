@@ -7,7 +7,7 @@
   "author": "Alexander Augusto",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node swagger.js",
     "dev": "nodemon -e yaml,js,ts,json src/index.js --ignore __tests__",
     "pretest": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate",
     "test": "cross-env NODE_ENV=test STORAGE_TYPE=local jest unit --runInBand",
@@ -34,8 +34,8 @@
     "pg": "^8.4.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
-    "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4",
+    "swagger-autogen": "^2.11.0",
+    "swagger-ui-express": "^4.1.6",
     "yup": "^0.29.3"
   },
   "devDependencies": {

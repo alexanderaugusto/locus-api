@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
-const swaggerConfig = require('./config/swagger')
+const swaggerConfig = require('./config/swagger.json')
 const swaggerUi = require('swagger-ui-express')
 
 class AppController {
