@@ -2,6 +2,9 @@ const { User, Property } = require('../models')
 
 module.exports = {
   add: async (req, res) => {
+    // #swagger.tags = ['Favorite Property']
+    // #swagger.description = 'Endpoint to favoite a property'
+
     const { user_id } = req
     const { property_id } = req.params
 
@@ -27,6 +30,9 @@ module.exports = {
   },
 
   delete: async (req, res) => {
+    // #swagger.tags = ['Favorite Property']
+    // #swagger.description = 'Endpoint delete property from favorites'
+
     const { user_id } = req
     const { property_id } = req.params
 

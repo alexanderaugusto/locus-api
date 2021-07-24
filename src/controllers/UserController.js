@@ -4,6 +4,9 @@ const deleteFile = require('../utils/deleteFile')
 
 module.exports = {
   create: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to create a new user'
+
     const { email, password, name, cpf, phone } = req.body
     const { key: avatar } = req.file || { key: 'default-avatar.png' }
 
@@ -45,6 +48,9 @@ module.exports = {
   },
 
   list: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to list an authenticated user'
+
     const { user_id } = req
 
     const user = await User.findByPk(user_id)
@@ -53,6 +59,9 @@ module.exports = {
   },
 
   list_properties: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to list user properties'
+
     const user_id = req.params.user_id || req.user_id
 
     const userProperties = await Property.findAll({
@@ -64,6 +73,9 @@ module.exports = {
   },
 
   list_favorites: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint list user favorite properties'
+
     const { user_id } = req
 
     const user = await User.findByPk(user_id, {
@@ -77,6 +89,9 @@ module.exports = {
   },
 
   update: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to update an user'
+
     const { user_id } = req
     const { name, cpf, phone } = req.body
     
@@ -102,6 +117,9 @@ module.exports = {
   },
 
   update_image: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to update user avatar'
+
     const { user_id } = req
     const { key: avatar } = req.file || { key: undefined }
 
@@ -133,6 +151,9 @@ module.exports = {
   },
 
   delete: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to delete an authenticated user'
+
     const { user_id } = req
 
     const user = await User.findByPk(user_id)

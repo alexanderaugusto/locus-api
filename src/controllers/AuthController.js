@@ -3,6 +3,8 @@ const { comparePassword, generateJwt } = require('../utils/auth')
 
 module.exports = {
   login: async (req, res) => {
+    // #swagger.tags = ['Auth']
+    // #swagger.description = 'Endpoint to do a login' 
     const { email, password } = req.body
 
     let user = await User.findOne({ where: { email } })
@@ -27,6 +29,9 @@ module.exports = {
   },
 
   renew_token: async (req, res) => {
+    // #swagger.tags = ['Auth']
+    // #swagger.description = 'Endpoint to renew user token'
+
     const { user_id } = req
 
     let user = await User.findByPk(user_id)

@@ -4,6 +4,9 @@ const mailer = require('../config/mailer')
 
 module.exports = {
   create: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to create a new property'
+
     const { user_id, files = [] } = req
     const {
       title,
@@ -75,6 +78,9 @@ module.exports = {
   },
 
   list: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to list a property by id'
+
     const property_id = req.params.property_id
 
     const property = await Property.findByPk(property_id, {
@@ -85,6 +91,9 @@ module.exports = {
   },
 
   update: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to update a property'
+
     const { user_id } = req
     const { property_id } = req.params
     const {
@@ -136,6 +145,9 @@ module.exports = {
   },
 
   delete: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to delete a property'
+
     const { user_id } = req
     const { property_id } = req.params
 
@@ -145,6 +157,9 @@ module.exports = {
   },
 
   list_all: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to list all properties'
+
     const { user_id } = req
     const { price, bedrooms, bathrooms, area, place, animal, type } = JSON.parse(JSON.stringify(req.query))
 
@@ -191,6 +206,9 @@ module.exports = {
   },
 
   contact: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint enter to enter in contact with property owner'
+
     const { user_id } = req
     const { property_id } = req.params
     const { message } = req.body
