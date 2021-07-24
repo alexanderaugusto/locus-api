@@ -61,7 +61,7 @@ module.exports = {
     property.dataValues.address = createdAddress
 
     if (!files.length) {
-      return res.json({ ...property.dataValues, images: [] })
+      return res.status(201).json({ ...property.dataValues, images: [] })
     } else {
       const images = files.map((file) => {
         return {
@@ -74,7 +74,7 @@ module.exports = {
       property.dataValues.images = createdImages
     }
 
-    return res.json(property)
+    return res.status(201).json(property)
   },
 
   list: async (req, res) => {
@@ -87,7 +87,14 @@ module.exports = {
       include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
     })
 
-    return res.json(property)
+    if(!property){
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    return res.status(200).json(property)
   },
 
   update: async (req, res) => {
@@ -139,7 +146,15 @@ module.exports = {
       abortEarly: false
     })
 
-    const [updated] = await Property.update(data, { where: { id: property_id, user_id } })
+    const property = await Property.findByPk(property_id)
+    if(!property){
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    await Property.update(data, { where: { id: property_id, user_id } })
 
     return res.status(204).json()
   },
@@ -151,7 +166,15 @@ module.exports = {
     const { user_id } = req
     const { property_id } = req.params
 
-    const deleted = await Property.destroy({ where: { id: property_id, user_id } })
+    const property = await Property.findByPk(property_id)
+    if(!property){
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    await Property.destroy({ where: { id: property_id, user_id } })
 
     return res.status(204).json()
   },
@@ -202,7 +225,7 @@ module.exports = {
       }
     })
 
-    return res.json(properties)
+    return res.status(200).json(properties)
   },
 
   contact: async (req, res) => {
@@ -221,6 +244,13 @@ module.exports = {
       ]
     })
 
+    if(!property){
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
     const result = await mailer().sendMail({
       to: property.owner.email,
       from: process.env.MAILER_CONTACT_EMAIL,
@@ -237,6 +267,6 @@ module.exports = {
       }
     })
 
-    return res.json(result)
+    return res.status(200).json(result)
   }
 }

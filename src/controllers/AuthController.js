@@ -9,23 +9,23 @@ module.exports = {
 
     let user = await User.findOne({ where: { email } })
     if (!user) {
-      return res.status(402).json({
-        cod: 402,
-        message: 'Email ou senha incorretos.'
+      return res.status(403).json({
+        cod: 403,
+        description: 'Autenticação inválida! E-mail ou senha incorretos.'
       })
     }
 
     if (!await comparePassword(password, user.password)) {
-      return res.status(402).json({
-        cod: 402,
-        message: 'Email ou senha incorretos.'
+      return res.status(403).json({
+        cod: 403,
+        description: 'Autenticação inválida! E-mail ou senha incorretos.'
       })
     }
 
     delete user.dataValues.password
     user.dataValues.token = generateJwt({ id: user.id })
 
-    return res.json(user)
+    return res.status(200).json(user)
   },
 
   renew_token: async (req, res) => {
@@ -39,6 +39,6 @@ module.exports = {
     delete user.dataValues.password
     user.dataValues.token = generateJwt({ id: user_id })
 
-    return res.json(user)
+    return res.status(200).json(user)
   }
 }

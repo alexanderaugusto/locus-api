@@ -44,7 +44,7 @@ module.exports = {
       })
     }
 
-    return res.json(user)
+    return res.status(201).json(user)
   },
 
   list: async (req, res) => {
@@ -55,7 +55,7 @@ module.exports = {
 
     const user = await User.findByPk(user_id)
 
-    return res.json(user)
+    return res.status(200).json(user)
   },
 
   list_properties: async (req, res) => {
@@ -64,12 +64,20 @@ module.exports = {
 
     const user_id = req.params.user_id || req.user_id
 
+    const user = await User.findByPk(user_id)
+    if (!user) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Usuário não encontrado."
+      })
+    }
+
     const userProperties = await Property.findAll({
       where: { user_id },
       include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
     })
 
-    return res.json(userProperties)
+    return res.status(200).json(userProperties)
   },
 
   list_favorites: async (req, res) => {
@@ -85,7 +93,14 @@ module.exports = {
       }
     })
 
-    return res.json(user.favorites)
+    if (!user) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Usuário não encontrado."
+      })
+    }
+
+    return res.status(200).json(user.favorites)
   },
 
   update: async (req, res) => {
@@ -94,7 +109,7 @@ module.exports = {
 
     const { user_id } = req
     const { name, cpf, phone } = req.body
-    
+
     const data = {
       name,
       cpf,
@@ -111,7 +126,7 @@ module.exports = {
       abortEarly: false
     })
 
-    const [updated] = await User.update(data, { where: { id: user_id } })
+    await User.update(data, { where: { id: user_id } })
 
     return res.status(204).json()
   },
@@ -124,7 +139,7 @@ module.exports = {
     const { key: avatar } = req.file || { key: undefined }
 
     const user = await User.findByPk(user_id)
-    
+
     const data = {
       avatar
     }
@@ -137,14 +152,14 @@ module.exports = {
       abortEarly: false
     })
 
-    const [updated] = await User.update(data, { where: { id: user_id } })
+    await User.update(data, { where: { id: user_id } })
 
     if (avatar && user.avatar !== 'default-avatar.png') {
       deleteFile('user/' + user.avatar)
     }
 
     if (avatar) {
-      return res.json({ avatar })
+      return res.status(200).json({ avatar })
     }
 
     return res.status(204).json()
@@ -157,8 +172,8 @@ module.exports = {
     const { user_id } = req
 
     const user = await User.findByPk(user_id)
-    
-    const deleted = await User.destroy({ where: { id: user_id } })
+
+    await User.destroy({ where: { id: user_id } })
 
     if (user.avatar !== 'default-avatar.png') {
       deleteFile('user/' + user.avatar)

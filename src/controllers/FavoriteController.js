@@ -10,21 +10,21 @@ module.exports = {
 
     const user = await User.findByPk(user_id)
     if (!user) {
-      return res.status(400).json({
-        cod: 400,
-        msg: 'Este usuário não existe na base de dados.'
+      return res.status(404).json({
+        cod: 404,
+        description: 'Usuário não encontrado.'
       })
     }
 
     const property = await Property.findByPk(property_id)
     if (!property) {
-      return res.status(400).json({
-        cod: 400,
-        msg: 'Este imóvel não existe na base de dados.'
+      return res.status(404).json({
+        cod: 404,
+        description: 'Usuário não encontrado.'
       })
     }
 
-    const favorite = await user.addFavorite(property)
+    await user.addFavorite(property)
 
     return res.status(204).json()
   },
@@ -38,21 +38,21 @@ module.exports = {
 
     const user = await User.findByPk(user_id)
     if (!user) {
-      return res.status(400).json({
-        cod: 400,
-        msg: 'Este usuário não existe na base de dados.'
+      return res.status(404).json({
+        cod: 404,
+        description: 'Usuário não encontrado.'
       })
     }
 
     const property = await Property.findByPk(property_id)
     if (!property) {
-      return res.status(400).json({
-        cod: 400,
-        msg: 'Este imóvel não existe na base de dados.'
+      return res.status(404).json({
+        cod: 404,
+        description: 'IMóvel não encontrado.'
       })
     }
 
-    const deleted = await user.removeFavorite(property)
+    await user.removeFavorite(property)
 
     return res.status(204).json()
   },
