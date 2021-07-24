@@ -38,7 +38,7 @@ describe("Property test", () => {
       })
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(201)
     expect(response.body.user_id).toBe(user.id)
   })
 

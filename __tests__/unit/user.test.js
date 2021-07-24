@@ -21,7 +21,7 @@ describe("User test", () => {
         phone: "35984529203"
       })
 
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(201)
     expect(response.body.email).toBe("alexaasf_10@hotmail.com")
   })
 
@@ -37,7 +37,7 @@ describe("User test", () => {
 
     deleteFile("user/" + response.body.avatar)
 
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(201)
     expect(response.body.email).toBe("alexaasf_10@hotmail.com")
   })
 
