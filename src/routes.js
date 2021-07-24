@@ -31,7 +31,7 @@ routes.put('/property/:property_id', authMiddleware.required, PropertyController
 routes.delete('/property/:property_id', authMiddleware.required, PropertyController.delete)
 
 // Favorite routes
-routes.put('/property/favorite/:property_id', authMiddleware.required, FavoriteController.add)
-routes.delete('/property/favorite/:property_id', authMiddleware.required, FavoriteController.delete)
+routes.put('/property/:property_id/favorite', authMiddleware.required, FavoriteController.add)
+routes.delete('/property/:property_id/favorite', authMiddleware.required, FavoriteController.delete)
 
 module.exports = routes

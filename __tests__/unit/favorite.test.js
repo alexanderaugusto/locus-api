@@ -14,7 +14,7 @@ describe("User test", () => {
     const property = await factory.create('Property')
 
     const response = await request(app)
-      .put("/property/favorite/" + property.id)
+      .put("/property/" + property.id + "/favorite")
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)
@@ -29,7 +29,7 @@ describe("User test", () => {
     })
 
     const response = await request(app)
-      .delete("/property/favorite/" + property.id)
+      .delete("/property/" + property.id + "/favorite")
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
     expect(response.status).toBe(204)

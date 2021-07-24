@@ -59,8 +59,11 @@
           }
         ],
         "responses": {
-          "402": {
-            "description": "Payment Required"
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -72,7 +75,11 @@
         ],
         "description": "Endpoint to renew user token",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/user": {
@@ -108,6 +115,9 @@
           }
         ],
         "responses": {
+          "201": {
+            "description": "Created"
+          },
           "409": {
             "description": "Conflict"
           }
@@ -119,7 +129,11 @@
         ],
         "description": "Endpoint to list an authenticated user",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       },
       "put": {
         "tags": [
@@ -172,7 +186,14 @@
         ],
         "description": "Endpoint to list user properties",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/user/{user_id}/properties": {
@@ -189,7 +210,14 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/user/favorites": {
@@ -199,7 +227,14 @@
         ],
         "description": "Endpoint list user favorite properties",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/user/avatar": {
@@ -210,6 +245,9 @@
         "description": "Endpoint to update user avatar",
         "parameters": [],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "204": {
             "description": "No Content"
           }
@@ -266,7 +304,11 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
       }
     },
     "/property/{property_id}/owner/contact": {
@@ -295,7 +337,14 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/property/{property_id}": {
@@ -312,7 +361,14 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       },
       "put": {
         "tags": [
@@ -369,6 +425,9 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -388,6 +447,9 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -399,10 +461,14 @@
         ],
         "description": "Endpoint to list all properties",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
-    "/property/favorite/{property_id}": {
+    "/property/{property_id}/favorite": {
       "put": {
         "tags": [
           "Favorite Property"
@@ -420,8 +486,8 @@
           "204": {
             "description": "No Content"
           },
-          "400": {
-            "description": "Bad Request"
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -442,8 +508,8 @@
           "204": {
             "description": "No Content"
           },
-          "400": {
-            "description": "Bad Request"
+          "404": {
+            "description": "Not Found"
           }
         }
       }

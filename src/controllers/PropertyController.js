@@ -8,34 +8,11 @@ module.exports = {
     // #swagger.description = 'Endpoint to create a new property'
 
     const { user_id, files = [] } = req
-    const {
-      title,
-      description,
-      price,
-      bedrooms,
-      bathrooms,
-      area,
-      place,
-      garage = 0,
-      animal,
-      type,
-      address
-    } = req.body
+    const { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address } = req.body
+    const { street, neighborhood, number, city, state, country, zipcode } = JSON.parse(JSON.stringify(address))
 
-    const data = {
-      user_id,
-      title,
-      description,
-      price,
-      bedrooms,
-      bathrooms,
-      area,
-      place,
-      garage,
-      animal,
-      type,
-      address
-    }
+    const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
+    const addressData = { street, neighborhood, number, city, state, country, zipcode }
 
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -49,14 +26,14 @@ module.exports = {
       type: Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"])
     })
 
-    await schema.validate(data, {
+    await schema.validate(propertyData, {
       abortEarly: false
     })
 
-    const createdAddress = await Address.create(address)
-    data.address_id = createdAddress.id
+    const createdAddress = await Address.create(addressData)
+    propertyData.address_id = createdAddress.id
 
-    const property = await Property.create(data)
+    const property = await Property.create(propertyData)
 
     property.dataValues.address = createdAddress
 
@@ -87,7 +64,7 @@ module.exports = {
       include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
     })
 
-    if(!property){
+    if (!property) {
       return res.status(404).json({
         cod: 404,
         description: "Imóvel não encontrado."
@@ -147,7 +124,7 @@ module.exports = {
     })
 
     const property = await Property.findByPk(property_id)
-    if(!property){
+    if (!property) {
       return res.status(404).json({
         cod: 404,
         description: "Imóvel não encontrado."
@@ -167,7 +144,7 @@ module.exports = {
     const { property_id } = req.params
 
     const property = await Property.findByPk(property_id)
-    if(!property){
+    if (!property) {
       return res.status(404).json({
         cod: 404,
         description: "Imóvel não encontrado."
@@ -244,7 +221,7 @@ module.exports = {
       ]
     })
 
-    if(!property){
+    if (!property) {
       return res.status(404).json({
         cod: 404,
         description: "Imóvel não encontrado."
