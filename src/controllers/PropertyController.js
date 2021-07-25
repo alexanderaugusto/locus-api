@@ -8,8 +8,15 @@ module.exports = {
     // #swagger.description = 'Endpoint to create a new property'
 
     const { user_id, files = [] } = req
-    const { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address } = req.body
-    const { street, neighborhood, number, city, state, country, zipcode } = JSON.parse(JSON.stringify(address))
+    let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address } = req.body
+
+    try{
+      address = JSON.parse(address)
+    }catch(err){
+      console.error(err)
+    }
+
+    const { street, neighborhood, number, city, state, country, zipcode } = address
 
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
     const addressData = { street, neighborhood, number, city, state, country, zipcode }
