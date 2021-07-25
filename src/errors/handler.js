@@ -3,7 +3,7 @@ const { ValidationError } = require('yup')
 const errorHandler = (err, req, res, next) => {
   console.error(err)
 
-  if(err instanceof ValidationError){
+  if (err instanceof ValidationError) {
     let errors = {}
 
     err.inner.forEach(err => {
