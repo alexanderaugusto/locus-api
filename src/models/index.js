@@ -1,10 +1,10 @@
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
-const config = require('../config/database')
+const dbConfig = require('../config/database')
 const db = {}
 
-sequelize = new Sequelize(config)
+sequelize = new Sequelize(dbConfig)
 
 fs
   .readdirSync(__dirname)
@@ -24,5 +24,12 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize
+
+try {
+  sequelize.authenticate()
+  console.log('Database connection has been established successfully:', `${dbConfig.host}:${dbConfig.database}`)
+} catch (err) {
+  console.error('Unable to connect to the database:', err)
+}
 
 module.exports = db
