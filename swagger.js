@@ -41,6 +41,6 @@ const swaggerConfig = './src/config/swagger.json'
 const endpoits = ['./src/routes.js']
 
 swaggerAutogen(swaggerConfig, endpoits, docDefinition).then(() => {
-  require('./src/index')
+  require('./src/server')
 })
 
