@@ -1,15 +1,17 @@
 {
-  "version": 2,
-  "builds": [
-      {
-          "src": "./server.js",
-          "use": "@vercel/node"
-      }
-  ],
-  "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "/"
-      }
-  ]
+	"builds": [
+		{
+			"src": "./server.js",
+			"use": "@vercel/node",
+			"config": {
+				"bundle": false
+			}
+		}
+	],
+	"routes": [
+		{
+			"src": "/(.*)",
+			"dest": "/server.js"
+		}
+	]
 }
