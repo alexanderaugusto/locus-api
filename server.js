@@ -1,9 +1,9 @@
 require('dotenv').config()
 require('express-async-errors')
 
-const errorHandler = require('./errors/handler')
+const errorHandler = require('./src/errors/handler')
 const http = require('http')
-const app = require('./app')
+const app = require('./src/app')
 
 app.use(errorHandler)
 
