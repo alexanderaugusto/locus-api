@@ -19,17 +19,15 @@ module.exports = {
 
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
-    function fixedEncodeURIComponent(str) {
-      return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-        return '%' + c.charCodeAt(0).toString(16);
-      });
-    }
+    const addressToGeolocation = number + ' ' + street + ', ' + city + ', ' + state + ', ' + country
 
-    const addressToGeolocation = fixedEncodeURIComponent(number + ' ' + street + ', ' + city + ', ' + state + ', ' + country)
-
+    const addressEncoded = encodeURIComponent(addressToGeolocation).replace(/[!'()*]/g, function(c) {
+      return '%' + c.charCodeAt(0).toString(16);
+    });
+    
     async function getGeolocation() {
       try {
-        const response = await axios.get('http://api.positionstack.com/v1/forward?access_key=a7c028b5f424c9fbd4048fcff15261cf&query=' + addressToGeolocation);
+        const response = await axios.get('http://api.positionstack.com/v1/forward?access_key=a7c028b5f424c9fbd4048fcff15261cf&query=' + addressEncoded);
         
         geolocation = {
           'latitude': response.data['data'][0].latitude,
@@ -40,7 +38,13 @@ module.exports = {
 
       } catch (e) {
         console.error(e)
-        return false
+
+        geolocation = {
+          'latitude': 'not found',
+          'longitude': 'not found'
+        }
+
+        return geolocation
       }
     }
 
@@ -48,11 +52,6 @@ module.exports = {
 
     let latitude =  addressGeolocation.latitude.toString();
     let longitude = addressGeolocation.longitude.toString();
-
-    if (addressGeolocation == false){
-      latitude = 'not found',
-      longitude = 'not found'
-    }
 
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
     const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
