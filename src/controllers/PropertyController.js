@@ -1,6 +1,7 @@
 const { User, Property, Image, Address, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
+const axios = require('axios')
 
 module.exports = {
   create: async (req, res) => {
@@ -10,16 +11,51 @@ module.exports = {
     const { user_id, files = [] } = req
     let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address } = req.body
 
-    try{
+    try {
       address = JSON.parse(address)
-    }catch(err){
+    } catch (err) {
       console.error(err)
     }
 
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
+    function fixedEncodeURIComponent(str) {
+      return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+        return '%' + c.charCodeAt(0).toString(16);
+      });
+    }
+
+    const addressToGeolocation = fixedEncodeURIComponent(number + ' ' + street + ', ' + city + ', ' + state + ', ' + country)
+
+    async function getGeolocation() {
+      try {
+        const response = await axios.get('http://api.positionstack.com/v1/forward?access_key=a7c028b5f424c9fbd4048fcff15261cf&query=' + addressToGeolocation);
+        
+        geolocation = {
+          'latitude': response.data['data'][0].latitude,
+          'longitude': response.data['data'][0].longitude,
+        }
+
+        return geolocation
+
+      } catch (e) {
+        console.error(e)
+        return false
+      }
+    }
+
+    const addressGeolocation = await getGeolocation()
+
+    let latitude =  addressGeolocation.latitude.toString();
+    let longitude = addressGeolocation.longitude.toString();
+
+    if (addressGeolocation == false){
+      latitude = 'not found',
+      longitude = 'not found'
+    }
+
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
-    const addressData = { street, neighborhood, number, city, state, country, zipcode }
+    const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
 
     const schema = Yup.object().shape({
       title: Yup.string().required(),
