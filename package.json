@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node swagger.js",
-    "dev": "nodemon -e server.js --ignore __tests__",
+    "dev": "nodemon server.js --ignore __tests__",
     "pretest": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate",
     "test": "cross-env NODE_ENV=test STORAGE_TYPE=local jest unit --runInBand",
     "posttest": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate:undo:all",
