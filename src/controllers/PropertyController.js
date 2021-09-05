@@ -1,7 +1,7 @@
 const { User, Property, Image, Address, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
-const axios = require('axios')
+const { getGeolocation } = require('../utils/functions')
 
 module.exports = {
   create: async (req, res) => {
@@ -19,44 +19,24 @@ module.exports = {
 
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
-    const addressToGeolocation = number + ' ' + street + ', ' + city + ', ' + state + ', ' + country
+    const addressGeolocation = await getGeolocation(address)
 
-    const addressEncoded = encodeURIComponent(addressToGeolocation).replace(/[!'()*]/g, function(c) {
-      return '%' + c.charCodeAt(0).toString(16);
-    });
-    
-    async function getGeolocation() {
-      try {
-        const response = await axios.get('http://api.positionstack.com/v1/forward?access_key=a7c028b5f424c9fbd4048fcff15261cf&query=' + addressEncoded);
-        
-        geolocation = {
-          'latitude': response.data['data'][0].latitude,
-          'longitude': response.data['data'][0].longitude,
-        }
-
-        return geolocation
-
-      } catch (e) {
-        console.error(e)
-
-        geolocation = {
-          'latitude': 'not found',
-          'longitude': 'not found'
-        }
-
-        return geolocation
-      }
-    }
-
-    const addressGeolocation = await getGeolocation()
-
-    let latitude =  addressGeolocation.latitude.toString();
-    let longitude = addressGeolocation.longitude.toString();
+    const latitude = addressGeolocation.latitude.toString()
+    const longitude = addressGeolocation.longitude.toString()
 
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
     const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
 
-    const schema = Yup.object().shape({
+    const addressSchema = Yup.object().shape({
+      street: Yup.string().required(), 
+      neighborhood: Yup.string().required(), 
+      number: Yup.number().optional(), 
+      city: Yup.string().required(), 
+      state: Yup.string().required(), 
+      country: Yup.string().required(),
+      zipcode: Yup.string().required()
+    })
+    const propertySchema = Yup.object().shape({
       title: Yup.string().required(),
       description: Yup.string().optional(),
       price: Yup.number().required(),
@@ -68,7 +48,10 @@ module.exports = {
       type: Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"])
     })
 
-    await schema.validate(propertyData, {
+    await addressSchema.validate(addressData, {
+      abortEarly: false
+    })
+    await propertySchema.validate(propertyData, {
       abortEarly: false
     })
 
