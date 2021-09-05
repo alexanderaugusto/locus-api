@@ -4,7 +4,7 @@ const Sequelize = require('sequelize')
 const dbConfig = require('../config/database')
 const db = {}
 
-sequelize = new Sequelize(dbConfig)
+const sequelize = new Sequelize(dbConfig)
 
 fs
   .readdirSync(__dirname)
@@ -27,7 +27,7 @@ db.Sequelize = Sequelize
 
 try {
   sequelize.authenticate()
-  console.log('Database connection has been established successfully:', `${dbConfig.host}:${dbConfig.database}`)
+  console.log('Database connection has been established successfully:', `${dbConfig.dialect}`)
 } catch (err) {
   console.error('Unable to connect to the database:', err)
 }
