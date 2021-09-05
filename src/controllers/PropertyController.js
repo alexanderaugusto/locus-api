@@ -1,4 +1,4 @@
-const { User, Property, Image, Address, Sequelize } = require('../models')
+const { User, Property, PropertyImage, Address, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
 const { getGeolocation } = require('../utils/functions')
@@ -72,7 +72,7 @@ module.exports = {
         }
       })
 
-      const createdImages = await Image.bulkCreate(images)
+      const createdImages = await PropertyImage.bulkCreate(images)
       property.dataValues.images = createdImages
     }
 

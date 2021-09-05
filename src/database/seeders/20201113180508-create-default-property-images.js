@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Image', [
+    return queryInterface.bulkInsert('PropertyImage', [
       // Property 1
       {
         path: "property1_img1.jpg",
@@ -339,6 +339,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Image', null, {});
+    return queryInterface.bulkDelete('PropertyImage', null, {});
   }
 }
