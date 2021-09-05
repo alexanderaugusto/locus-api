@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     Property.belongsTo(models.Address, { foreignKey: 'address_id', as: 'address' })
     Property.belongsToMany(models.User, { foreignKey: 'property_id', through: models.Favorite, as: 'favorite_users' })
     Property.belongsToMany(models.User, { foreignKey: 'property_id', through: models.Rental, as: 'rental_user' })
-    Property.hasMany(models.Image, { foreignKey: 'property_id', as: 'images' })
+    Property.belongsToMany(models.User, { foreignKey: 'property_id', through: models.Visit, as: 'visits' })
+    Property.hasMany(models.PropertyImage, { foreignKey: 'property_id', as: 'images' })
+    Property.hasMany(models.PropertyVisit, { foreignKey: 'property_id', as: 'visit' })
   }
   
   return Property

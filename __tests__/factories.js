@@ -5,7 +5,7 @@ const {
   Address,
   User,
   Property,
-  Image,
+  PropertyImage,
   Rental,
   Favorite
 } = require('../src/models')
@@ -56,7 +56,7 @@ factory.define('Property', Property, {
   }
 })
 
-factory.define('Image', Image, {
+factory.define('PropertyImage', PropertyImage, {
   path: "<IMAGE_PATH>",
   property_id: async () => {
     const property = await factory.create('Property')

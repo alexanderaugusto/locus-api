@@ -31,7 +31,7 @@ describe("Sequelize test", () => {
   })
 
   it("should create a image", async () => {
-    const image = await factory.create('Image')
+    const image = await factory.create('PropertyImage')
 
     expect(image.id).toBeTruthy()
     expect(image.property_id).toBeTruthy()
