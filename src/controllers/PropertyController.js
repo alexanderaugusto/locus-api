@@ -65,23 +65,25 @@ module.exports = {
     const createdImages = await PropertyImage.bulkCreate(images)
     property.dataValues.images = createdImages
 
-    const visits = []
-    Object.entries(available_times).forEach(item => {
-      const key = item[0]
-      const value = item[1]
+    if (available_times) {
+      const visits = []
+      Object.entries(available_times).forEach(item => {
+        const key = item[0]
+        const value = item[1]
 
-      if (["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].includes(key) && value) {
-        value.forEach(time => {
-          visits.push({
-            weekday: key,
-            time,
-            property_id: property.id
+        if (["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].includes(key) && value) {
+          value.forEach(time => {
+            visits.push({
+              weekday: key,
+              time,
+              property_id: property.id
+            })
           })
-        })
-      }
-    })
-    const createdVisits = await PropertyVisit.bulkCreate(visits)
-    property.dataValues.visits = available_times
+        }
+      })
+      await PropertyVisit.bulkCreate(visits)
+      property.dataValues.visits = available_times
+    }
 
     return res.status(201).json(property)
   },
@@ -116,7 +118,7 @@ module.exports = {
     property.dataValues.visits.forEach(value => {
       visits[value.weekday].push(value.time)
     })
-    property.dataValues.visits= visits
+    property.dataValues.visits = visits
 
     return res.status(200).json(property)
   },
