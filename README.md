@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Travis CI" src="https://github.com/alexanderaugusto/imovel-api/actions/workflows/main/badge.svg" />
+  <img alt="Github Actions" src="https://github.com/alexanderaugusto/imovel-api/actions/workflows/main.yml/badge.svg" />
   
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/alexanderaugusto/imovel-api?color=%2304D361">
 
