@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    time: DataTypes.DATE
+    date: DataTypes.DATE
   })
 
   return Visit

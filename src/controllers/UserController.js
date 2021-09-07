@@ -70,7 +70,7 @@ module.exports = {
       })
     }
 
-    const visit = await Visit.create({ user_id, property_id, time: date })
+    const visit = await Visit.create({ user_id, property_id, date })
 
     return res.status(201).json(visit)
   },
