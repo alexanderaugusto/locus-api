@@ -1,4 +1,4 @@
-const { User, Property, PropertyImage, Address, Sequelize } = require('../models')
+const { User, Property, PropertyImage, PropertyVisit, Address, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
 const { getGeolocation } = require('../utils/functions')
@@ -9,10 +9,11 @@ module.exports = {
     // #swagger.description = 'Endpoint to create a new property'
 
     const { user_id, files = [] } = req
-    let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address } = req.body
+    let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address, available_times } = req.body
 
     try {
       address = JSON.parse(address)
+      available_times = JSON.parse(available_times)
     } catch (err) {
       console.error(err)
     }
@@ -20,23 +21,13 @@ module.exports = {
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
     const addressGeolocation = await getGeolocation(address)
-
     const latitude = addressGeolocation.latitude.toString()
     const longitude = addressGeolocation.longitude.toString()
 
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
     const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
 
-    const addressSchema = Yup.object().shape({
-      street: Yup.string().required(), 
-      neighborhood: Yup.string().required(), 
-      number: Yup.number().optional(), 
-      city: Yup.string().required(), 
-      state: Yup.string().required(), 
-      country: Yup.string().required(),
-      zipcode: Yup.string().required()
-    })
-    const propertySchema = Yup.object().shape({
+    const schema = Yup.object().shape({
       title: Yup.string().required(),
       description: Yup.string().optional(),
       price: Yup.number().required(),
@@ -45,13 +36,17 @@ module.exports = {
       area: Yup.number().optional(),
       place: Yup.number().optional(),
       animal: Yup.boolean().optional(),
-      type: Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"])
+      type: Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"]),
+      street: Yup.string().required(),
+      neighborhood: Yup.string().required(),
+      number: Yup.number().optional(),
+      city: Yup.string().required(),
+      state: Yup.string().required(),
+      country: Yup.string().required(),
+      zipcode: Yup.string().required()
     })
 
-    await addressSchema.validate(addressData, {
-      abortEarly: false
-    })
-    await propertySchema.validate(propertyData, {
+    await schema.validate({ ...propertyData, ...addressData }, {
       abortEarly: false
     })
 
@@ -59,22 +54,34 @@ module.exports = {
     propertyData.address_id = createdAddress.id
 
     const property = await Property.create(propertyData)
-
     property.dataValues.address = createdAddress
 
-    if (!files.length) {
-      return res.status(201).json({ ...property.dataValues, images: [] })
-    } else {
-      const images = files.map((file) => {
-        return {
-          path: file.key,
-          property_id: property.id
-        }
-      })
+    const images = files.map((file) => {
+      return {
+        path: file.key,
+        property_id: property.id
+      }
+    })
+    const createdImages = await PropertyImage.bulkCreate(images)
+    property.dataValues.images = createdImages
 
-      const createdImages = await PropertyImage.bulkCreate(images)
-      property.dataValues.images = createdImages
-    }
+    const visits = []
+    Object.entries(available_times).forEach(item => {
+      const key = item[0]
+      const value = item[1]
+
+      if (["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].includes(key) && value) {
+        value.forEach(time => {
+          visits.push({
+            weekday: key,
+            time,
+            property_id: property.id
+          })
+        })
+      }
+    })
+    const createdVisits = await PropertyVisit.bulkCreate(visits)
+    property.dataValues.visits = available_times
 
     return res.status(201).json(property)
   },
@@ -86,7 +93,7 @@ module.exports = {
     const property_id = req.params.property_id
 
     const property = await Property.findByPk(property_id, {
-      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }, { association: 'visits' }]
     })
 
     if (!property) {
@@ -95,6 +102,21 @@ module.exports = {
         description: "Imóvel não encontrado."
       })
     }
+
+    const visits = {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: []
+    }
+
+    property.dataValues.visits.forEach(value => {
+      visits[value.weekday].push(value.time)
+    })
+    property.dataValues.visits= visits
 
     return res.status(200).json(property)
   },

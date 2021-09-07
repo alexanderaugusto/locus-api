@@ -14,10 +14,12 @@ routes.put('/auth/renew', authMiddleware.required, AuthController.renew_token)
 
 // User routes
 routes.post('/user', multer(multerConfig('/user')).single('file'), UserController.create)
+routes.post('/user/visit', authMiddleware.required, UserController.schedule_visit)
 routes.get('/user', authMiddleware.required, UserController.list)
 routes.get('/user/properties', authMiddleware.required, UserController.list_properties)
 routes.get('/user/:user_id/properties', authMiddleware.optional, UserController.list_properties)
 routes.get('/user/favorites', authMiddleware.required, UserController.list_favorites)
+routes.get('/user/visits', authMiddleware.required, UserController.list_visits)
 routes.put('/user', authMiddleware.required, UserController.update)
 routes.put('/user/avatar', authMiddleware.required, multer(multerConfig('/user')).single('file'), UserController.update_image)
 routes.delete('/user', authMiddleware.required, UserController.delete)

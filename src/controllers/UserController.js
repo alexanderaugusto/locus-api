@@ -1,4 +1,4 @@
-const { User, Property } = require('../models')
+const { User, Property, Visit } = require('../models')
 const Yup = require('yup')
 const deleteFile = require('../utils/deleteFile')
 
@@ -45,6 +45,34 @@ module.exports = {
     }
 
     return res.status(201).json(user)
+  },
+
+  schedule_visit: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint schedule visit to user'
+
+    const { user_id } = req
+    const { property_id, date } = req.body
+
+    const user = await User.findByPk(user_id)
+    if (!user) {
+      return res.status(404).json({
+        cod: 404,
+        description: 'Usuário não encontrado.'
+      })
+    }
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(404).json({
+        cod: 404,
+        description: 'Usuário não encontrado.'
+      })
+    }
+
+    const visit = await Visit.create({ user_id, property_id, time: date })
+
+    return res.status(201).json(visit)
   },
 
   list: async (req, res) => {
@@ -101,6 +129,29 @@ module.exports = {
     }
 
     return res.status(200).json(user.favorites)
+  },
+
+  list_visits: async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint list user visits'
+
+    const { user_id } = req
+
+    const user = await User.findByPk(user_id)
+    if (!user) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Usuário não encontrado."
+      })
+    }
+
+    const visits = await Visit.findAll({
+      where: {
+        user_id
+      }
+    })
+
+    return res.status(200).json(visits)
   },
 
   update: async (req, res) => {
