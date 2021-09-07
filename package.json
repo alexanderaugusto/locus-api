@@ -10,11 +10,8 @@
     "start": "node swagger.js",
     "dev": "nodemon server.js --ignore __tests__",
     "pretest": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate",
-    "test": "cross-env NODE_ENV=test STORAGE_TYPE=local jest unit --runInBand",
-    "posttest": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate:undo:all",
-    "pretest:integration": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate",
-    "test:integration": "cross-env NODE_ENV=test STORAGE_TYPE=local jest integration --runInBand",
-    "posttest:integration": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate:undo:all"
+    "test": "cross-env NODE_ENV=test STORAGE_TYPE=local jest --runInBand",
+    "posttest": "cross-env NODE_ENV=test STORAGE_TYPE=local sequelize db:migrate:undo:all"
   },
   "dependencies": {
     "axios": "^0.21.1",

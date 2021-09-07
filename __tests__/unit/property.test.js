@@ -34,7 +34,15 @@ describe("Property test", () => {
           zipcode: "37540-000",
           latitude: "-22.2569742",
           longitude: "-45.6994959"
-        }
+        },
+        available_times: {
+          monday: ["08:00", "09:00", "10:45"],
+          tuesday: ["08:00", "09:00", "10:45"],
+          wednesday: ["08:00", "09:00", "10:45"],
+          thursday: ["08:00", "09:00", "10:45"],
+          friday: ["08:00", "09:00", "10:45"],
+          saturday: ["08:00", "09:00", "10:45"]
+      }
       })
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 

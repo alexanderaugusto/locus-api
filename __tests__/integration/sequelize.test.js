@@ -37,13 +37,6 @@ describe("Sequelize test", () => {
     expect(image.property_id).toBeTruthy()
   })
 
-  it("should create a rental", async () => {
-    const rental = await factory.create('Rental')
-
-    expect(rental.user_id).toBeTruthy()
-    expect(rental.property_id).toBeTruthy()
-  })
-
   it("should create a favorite", async () => {
     const favorite = await factory.create('Favorite')
 
