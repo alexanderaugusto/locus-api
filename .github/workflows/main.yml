@@ -1,0 +1,26 @@
+name: "Deploy App"
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn
+    - name: Run tests
+      run: yarn test
+
+  deploy: 
+    needs: build
+    runs-on: ubuntu-latest
+    name: "Deploy App"
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "imovel-app-1"
+          heroku_email: "alexaasf1010@gmail.com"
