@@ -95,7 +95,7 @@ module.exports = {
     const property_id = req.params.property_id
 
     const property = await Property.findByPk(property_id, {
-      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }, { association: 'visits' }]
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }]
     })
 
     if (!property) {
@@ -105,7 +105,34 @@ module.exports = {
       })
     }
 
-    const visits = {
+    return res.status(200).json(property)
+  },
+
+  list_visits: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to list property visits'
+
+    const property_id = req.params.property_id
+
+    const property = await Property.findByPk(property_id, {
+      include: [{ association: 'visits' }]
+    })
+
+    if (!property) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    const today = new Date()
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
+    today.setDate(today.getDate() + 1)
+
+    const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+    const visits = []
+
+    const available_times = {
       monday: [],
       tuesday: [],
       wednesday: [],
@@ -116,11 +143,28 @@ module.exports = {
     }
 
     property.dataValues.visits.forEach(value => {
-      visits[value.weekday].push(value.time)
+      available_times[value.weekday].push(value.time)
     })
-    property.dataValues.visits = visits
 
-    return res.status(200).json(property)
+    while (true) {
+      const weekday = weekdays[today.getDay()]
+
+      if (available_times[weekday].length) {
+        visits.push({
+          weekday,
+          date: new Date(today),
+          available_times: available_times[weekday]
+        })
+      }
+
+      today.setDate(today.getDate() + 1)
+
+      if (visits.length >= 9) {
+        break
+      }
+    }
+
+    return res.status(200).json(visits)
   },
 
   update: async (req, res) => {
