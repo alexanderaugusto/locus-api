@@ -21,8 +21,8 @@ module.exports = {
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
     const addressGeolocation = await getGeolocation(address)
-    const latitude = addressGeolocation.latitude.toString()
-    const longitude = addressGeolocation.longitude.toString()
+    const latitude = addressGeolocation.latitude
+    const longitude = addressGeolocation.longitude
 
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
     const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
