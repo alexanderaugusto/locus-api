@@ -21,8 +21,19 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12 
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "imovel-app-1"
           heroku_email: "alexaasf1010@gmail.com"
+
+      - name: Deploy to IBM Cloud Foundry
+        uses: IBM/cloudfoundry-deploy@master
+        with:
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+          IBM_CLOUD_CF_API: ${{ secrets.IBM_CLOUD_CF_API }}
+          IBM_CLOUD_CF_ORG: ${{ secrets.IBM_CLOUD_CF_ORG }}
+          IBM_CLOUD_CF_SPACE: ${{ secrets.IBM_CLOUD_CF_SPACE }}
+          APP_MANIFEST_FILE: './manifest.yml'

@@ -179,6 +179,39 @@
         }
       }
     },
+    "/user/visit": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint schedule visit to user",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "property_id": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/user/properties": {
       "get": {
         "tags": [
@@ -226,6 +259,23 @@
           "User"
         ],
         "description": "Endpoint list user favorite properties",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/visits": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint list user visits",
         "parameters": [],
         "responses": {
           "200": {
@@ -298,6 +348,9 @@
                   "example": "any"
                 },
                 "address": {
+                  "example": "any"
+                },
+                "available_times": {
                   "example": "any"
                 }
               }
@@ -447,6 +500,30 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/property/{property_id}/visits": {
+      "get": {
+        "tags": [
+          "Property"
+        ],
+        "description": "Endpoint to list property visits",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "Not Found"
