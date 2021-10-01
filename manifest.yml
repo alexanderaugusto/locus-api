@@ -1,3 +1,3 @@
 applications:
-- name: locus-app
+- name: locus-api
   memory: 128M
