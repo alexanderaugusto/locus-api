@@ -1,9 +1,9 @@
 {
   "name": "api-nodejs",
   "version": "1.0.0",
-  "description": "This is the api of IMovel app created to Software Engineering subject",
+  "description": "This is the api rest of Locus",
   "main": "server.js",
-  "repository": "https://github.com/alexanderaugusto/IMovel",
+  "repository": "https://github.com/alexanderaugusto/locus-api",
   "author": "Alexander Augusto",
   "license": "MIT",
   "scripts": {

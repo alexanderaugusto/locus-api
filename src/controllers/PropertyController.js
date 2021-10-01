@@ -324,7 +324,7 @@ module.exports = {
     const result = await mailer().sendMail({
       to: property.owner.email,
       from: process.env.MAILER_CONTACT_EMAIL,
-      subject: 'IMovel - Um usuário tem interesse em seu imóvel',
+      subject: 'Locus - Um usuário tem interesse em seu imóvel',
       template: 'contact',
       context: {
         name: user.name,

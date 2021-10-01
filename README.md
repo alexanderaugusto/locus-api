@@ -1,12 +1,12 @@
 <p align="center">
-  <img alt="Github Actions" src="https://github.com/alexanderaugusto/imovel-api/actions/workflows/main.yml/badge.svg" />
+  <img alt="Github Actions" src="https://github.com/alexanderaugusto/locus-api/actions/workflows/main.yml/badge.svg" />
   
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/alexanderaugusto/imovel-api?color=%2304D361">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/alexanderaugusto/locus-api?color=%2304D361">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/alexanderaugusto/imovel-api">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/alexanderaugusto/locus-api">
   
-  <a href="https://github.com/alexanderaugusto/imovel-api/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/alexanderaugusto/imovel-api">
+  <a href="https://github.com/alexanderaugusto/locus-api/commits/master">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/alexanderaugusto/locus-api">
   </a>
     
    <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">  
@@ -14,7 +14,7 @@
 </p>
 
 <h4 align="center"> 
-	✅ IMovel API - Concluído ✅
+	✅ Locus API - Concluído ✅
 </h4>
 
 <p align="center">
@@ -29,17 +29,17 @@
 
 ## 💻 Sobre o projeto
 
-IMovel API - é o backend do aplicativo [IMovel](https://github.com/alexanderaugusto/imovel-app.git), onde está toda regra de negócia da aplicação. Nesta parte, fazemos toda conexão com banco de dados, utilizando um ORM ([Sequelize](https://sequelize.org/master/)), processamos informações mais sigilosas, como token de autenticação, etc. e disponbilizamos em formato de API Restful utilizando o [Express](https://expressjs.com/) para manuseio das rotas.
+IMLocusovel API - é o backend do aplicativo [Locus](https://github.com/alexanderaugusto/locus-app.git), onde está toda regra de negócia da aplicação. Nesta parte, fazemos toda conexão com banco de dados, utilizando um ORM ([Sequelize](https://sequelize.org/master/)), processamos informações mais sigilosas, como token de autenticação, etc. e disponbilizamos em formato de API Restful utilizando o [Express](https://expressjs.com/) para manuseio das rotas.
 
-Esta API também está hospedada no [Heroku](https://dashboard.heroku.com/) no endereço https://imovel-api.herokuapp.com/. Além disso, você pode acessar toda documentação das rotas em https://imovel-api.herokuapp.com/api/docs.
+Esta API também está hospedada no [Heroku](https://dashboard.heroku.com/) no endereço https://locus-api.herokuapp.com/. Além disso, você pode acessar toda documentação das rotas em https://locus-api.herokuapp.com/api/docs.
 
 ---
 
 ## 🚀 Como executar o projeto
 
 Este projeto é dividido em três partes:
-1. [Frontend - Mobile](https://github.com/alexanderaugusto/imovel-app.git)
-2. [Frontend - Web](https://github.com/alexanderaugusto/imovel-web.git)
+1. [Frontend - Mobile](https://github.com/alexanderaugusto/locus-app.git)
+2. [Frontend - Web](https://github.com/alexanderaugusto/locus-web.git)
 3. Backend (Neste repositório)
 
 ### Pré-requisitos
@@ -47,7 +47,7 @@ Este projeto é dividido em três partes:
 Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
 [Git](https://git-scm.com) e [Node.js](https://nodejs.org/en/).
 
-Alem disso é necessário que você tenha algum banco de dados relacional rodando localmente ou em algum servidor para fazer a conexão com a api. Como dito anteriormente, esta api está disponível em https://imovel-api.herokuapp.com/, rodando com um banco dados PostgreSQL, porém para rodar localmente é necessário que você configure o seu próprio banco de dados (somente crie o banco de dados, não é necessário criar as tabelas, isso será feito pelo nodejs). Recomendo que utilize o [ElephantSQL](https://www.elephantsql.com/), crie uma instâncie de banco de dados Postgres (é gratuito) e pegue as informações de acesso (username, password, name, hostname e port) para configurar no nodejs. Outra maneira, caso você tenha em sua máquina o [MySQL](https://www.mysql.com/), apenas crie um banco de dados nele e pegue as informações de acesso que serão utilizadas na execução do projeto.
+Alem disso é necessário que você tenha algum banco de dados relacional rodando localmente ou em algum servidor para fazer a conexão com a api. Como dito anteriormente, esta api está disponível em https://locus-api.herokuapp.com/, rodando com um banco dados PostgreSQL, porém para rodar localmente é necessário que você configure o seu próprio banco de dados (somente crie o banco de dados, não é necessário criar as tabelas, isso será feito pelo nodejs). Recomendo que utilize o [ElephantSQL](https://www.elephantsql.com/), crie uma instâncie de banco de dados Postgres (é gratuito) e pegue as informações de acesso (username, password, name, hostname e port) para configurar no nodejs. Outra maneira, caso você tenha em sua máquina o [MySQL](https://www.mysql.com/), apenas crie um banco de dados nele e pegue as informações de acesso que serão utilizadas na execução do projeto.
 
 Caso você já tenha estas ferramentas instaladas, <a href="#executando-o-projeto">clique aqui</a> para seguir ao próximo passo.
 
@@ -163,10 +163,10 @@ No mac, vamos instalar com o Homebrew.
 
    ```bash
     # Clone este repositório
-    $ git clone https://github.com/alexanderaugusto/imovel-api.git
+    $ git clone https://github.com/alexanderaugusto/locus-api.git
 
     # Acesse a pasta do projeto no seu terminal/cmd
-    $ cd imovel-api
+    $ cd locus-api
 
     # Instale as dependências
     $ yarn install ou npm install
@@ -232,7 +232,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
   -   **[sqlite3](https://www.npmjs.com/package/sqlite3)**
   -   **[supertest](https://www.npmjs.com/package/supertest)**
   
-Veja o arquivo  [package.json](https://github.com/alexanderaugusto/imovel-api/blob/master/package.json)
+Veja o arquivo  [package.json](https://github.com/alexanderaugusto/locus-api/blob/master/package.json)
 
 ---
 

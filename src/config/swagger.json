@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "IMovel API",
-    "description": "IMovel API information",
+    "title": "Locus API",
+    "description": "Locus API information",
     "contact": {
       "name": "Alexander Augusto",
       "email": "alexaasf1010@gmail.com",
