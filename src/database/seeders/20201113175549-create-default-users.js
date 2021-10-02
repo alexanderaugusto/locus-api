@@ -10,7 +10,7 @@ module.exports = {
         name: 'Equipe Locus',
         cpf: '111.111.111.05',
         phone: '(35) 99999-9999',
-        avatar: 'default-avatar.png',
+        avatar: 'locus-avatar.png',
         created_at: new Date(),
         updated_at: new Date()
       }
