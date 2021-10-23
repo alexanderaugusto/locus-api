@@ -26,7 +26,7 @@ const storageTypes = {
   cloudinary: (folder) => new CloudinaryStorage({
     cloudinary,
     params: {
-      folder: folder.replace('/', ''),
+      folder: 'locus/' + folder.replace('/', ''),
       public_id: (req, file) => {
         const hash = crypto.randomBytes(16).toString('hex')
         const filename = `${hash}-${file.originalname}`

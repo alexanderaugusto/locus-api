@@ -5,7 +5,7 @@ const cloudinary = require('../config/cloudinary')
 
 module.exports = (file) => {
   if (process.env.STORAGE_TYPE === 'cloudinary') {
-    cloudinary.uploader.destroy(file.split('.').slice(0, -1).join('.'), (err, result) => console.log(err, result))
+    cloudinary.uploader.destroy('locus/' + file.split('.').slice(0, -1).join('.'), (err, result) => console.log(err, result))
   } else {
     const pathname = path.resolve(__dirname, '../../tmp/uploads/' + file)
     if (!pathname)
