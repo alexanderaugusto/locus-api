@@ -9,23 +9,11 @@ module.exports = {
     // #swagger.description = 'Endpoint to create a new property'
 
     const { user_id, files = [] } = req
-    let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address, available_times } = req.body
-
-    try {
-      address = JSON.parse(address)
-      available_times = JSON.parse(available_times)
-    } catch (err) {
-      console.error(err)
-    }
-
+    let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address = {}, available_times } = req.body
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
-    const addressGeolocation = await getGeolocation(address)
-    const latitude = addressGeolocation.latitude
-    const longitude = addressGeolocation.longitude
-
     const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
-    const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
+    const addressData = { street, neighborhood, number, city, state, country, zipcode }
 
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -37,18 +25,27 @@ module.exports = {
       place: Yup.number().optional(),
       animal: Yup.boolean().optional(),
       type: Yup.string().required().oneOf(["Apartamento", "Casa", "Casa de Condomínio"]),
-      street: Yup.string().required(),
-      neighborhood: Yup.string().required(),
-      number: Yup.number().optional(),
-      city: Yup.string().required(),
-      state: Yup.string().required(),
-      country: Yup.string().required(),
-      zipcode: Yup.string().required()
+      address: Yup.object().shape({
+        street: Yup.string().required(),
+        neighborhood: Yup.string().required(),
+        number: Yup.number().optional(),
+        city: Yup.string().required(),
+        state: Yup.string().required(),
+        country: Yup.string().required(),
+        zipcode: Yup.string().required()
+      })
     })
 
-    await schema.validate({ ...propertyData, ...addressData }, {
+    await schema.validate({ ...propertyData, address: addressData }, {
       abortEarly: false
     })
+
+    const addressGeolocation = await getGeolocation(address)
+    const latitude = addressGeolocation.latitude
+    const longitude = addressGeolocation.longitude
+
+    addressData.latitude = latitude
+    addressData.longitude = longitude
 
     const createdAddress = await Address.create(addressData)
     propertyData.address_id = createdAddress.id
@@ -86,6 +83,66 @@ module.exports = {
     }
 
     return res.status(201).json(property)
+  },
+
+  add_images: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to add images to property'
+
+    const { files = [] } = req
+    const { property_id } = req.params
+
+    const schema = Yup.object().shape({
+      files: Yup.array().min(1).required(),
+    })
+
+    await schema.validate({ files }, {
+      abortEarly: false
+    })
+
+    const images = files.map((file) => {
+      return {
+        path: file.key,
+        property_id: property_id
+      }
+    })
+
+    const createdImages = await PropertyImage.bulkCreate(images)
+
+    return res.status(201).json(createdImages)
+  },
+
+  add_visits: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to add available times to property'
+    const { property_id } = req.params
+    let { available_times } = req.body
+
+    const schema = Yup.object().shape({
+      available_times: Yup.object().required(),
+    })
+
+    await schema.validate({ available_times }, {
+      abortEarly: false
+    })
+
+    const visits = []
+    Object.entries(available_times).forEach(item => {
+      const key = item[0]
+      const value = item[1]
+
+      if (["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].includes(key) && value) {
+        value.forEach(time => {
+          visits.push({
+            weekday: key,
+            time,
+            property_id: property_id
+          })
+        })
+      }
+    })
+
+    return res.status(201).json(visits)
   },
 
   list: async (req, res) => {
