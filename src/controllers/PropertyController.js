@@ -281,9 +281,18 @@ module.exports = {
       })
     }
 
-    await Property.update(data, { where: { id: property_id, user_id } })
+    const [updated] = await Property.update(data, { where: { id: property_id, user_id } })
 
-    return res.status(204).json()
+    if (!updated) {
+      return res.status(400).json({
+        cod: 400,
+        description: "Não foi possível atualizar o imóvel."
+      })
+    }
+
+    const propertyUpdated = await Property.findByPk(property_id)
+
+    return res.status(200).json(propertyUpdated)
   },
 
   delete: async (req, res) => {

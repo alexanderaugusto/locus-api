@@ -65,14 +65,14 @@ describe("Property test", () => {
     })
 
     const response = await request(app)
-      .put("/property/" + property.id)
+      .patch("/property/" + property.id)
       .send({
         area: 40,
         price: 1200.00
       })
       .set("Authorization", `Bearer ${generateJwt({ id: user.id })}`)
 
-    expect(response.status).toBe(204)
+    expect(response.status).toBe(200)
   })
 
   it("Should delete a user property using api route", async () => {
