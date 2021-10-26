@@ -36,6 +36,7 @@ routes.patch('/property/:property_id', authMiddleware.required, PropertyControll
 routes.patch('/property/:property_id/address', authMiddleware.required, PropertyController.update_address)
 routes.delete('/property/:property_id', authMiddleware.required, PropertyController.delete)
 routes.delete('/property/:property_id/visit', authMiddleware.required, PropertyController.delete_visit)
+routes.delete('/property/:property_id/image', authMiddleware.required, PropertyController.delete_image)
 
 // Favorite routes
 routes.put('/property/:property_id/favorite', authMiddleware.required, FavoriteController.add)

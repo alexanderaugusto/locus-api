@@ -3,6 +3,7 @@ const Yup = require('yup')
 const mailer = require('../config/mailer')
 const { getGeolocation } = require('../utils/functions')
 const { STATES, WEEKDAYS } = require('../utils/constants')
+const deleteFile = require('../utils/deleteFile')
 
 module.exports = {
   create: async (req, res) => {
@@ -410,6 +411,43 @@ module.exports = {
     }
 
     await PropertyVisit.destroy({ where: { property_id, weekday, time } })
+
+    return res.status(204).json()
+  },
+
+  delete_image: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to delete a property visit'
+
+    const { property_id } = req.params
+    const { image_id } = req.body
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    const image = await PropertyImage.findByPk(image_id)
+    if (!image) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Imagem não encontrada."
+      })
+    }
+
+    const deleted = await PropertyImage.destroy({ where: { id: image_id } })
+
+    if (!deleted) {
+      return res.status(400).json({
+        cod: 400,
+        description: "Não foi possível excluir a imagem."
+      })
+    }
+
+    deleteFile('property/' + image.path)
 
     return res.status(204).json()
   },
