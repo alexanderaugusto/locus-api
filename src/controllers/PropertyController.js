@@ -4,6 +4,7 @@ const mailer = require('../config/mailer')
 const { getGeolocation } = require('../utils/functions')
 const { STATES, WEEKDAYS } = require('../utils/constants')
 const deleteFile = require('../utils/deleteFile')
+const { image } = require('../config/cloudinary')
 
 module.exports = {
   create: async (req, res) => {
@@ -420,7 +421,7 @@ module.exports = {
     // #swagger.description = 'Endpoint to delete a property visit'
 
     const { property_id } = req.params
-    const { image_id } = req.body
+    const { images_ids } = req.body
 
     const property = await Property.findByPk(property_id)
     if (!property) {
@@ -430,15 +431,15 @@ module.exports = {
       })
     }
 
-    const image = await PropertyImage.findByPk(image_id)
-    if (!image) {
-      return res.status(404).json({
-        cod: 404,
-        description: "Imagem não encontrada."
-      })
-    }
+    // const image = await PropertyImage.findByPk(image_id)
+    // if (!image) {
+    //   return res.status(404).json({
+    //     cod: 404,
+    //     description: "Imagem não encontrada."
+    //   })
+    // }
 
-    const deleted = await PropertyImage.destroy({ where: { id: image_id } })
+    const deleted = await PropertyImage.destroy({ where: { id: images_ids } })
 
     if (!deleted) {
       return res.status(400).json({
@@ -447,7 +448,7 @@ module.exports = {
       })
     }
 
-    deleteFile('property/' + image.path)
+    // deleteFile('property/' + image.path)
 
     return res.status(204).json()
   },
