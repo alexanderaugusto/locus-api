@@ -27,3 +27,5 @@ exports.STATES = [
   "SE",
   "TO"
 ]
+
+exports.WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]

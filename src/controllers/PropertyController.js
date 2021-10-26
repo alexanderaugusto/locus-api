@@ -2,7 +2,7 @@ const { User, Property, PropertyImage, PropertyVisit, Address, Sequelize } = req
 const Yup = require('yup')
 const mailer = require('../config/mailer')
 const { getGeolocation } = require('../utils/functions')
-const { STATES } = require('../utils/constants')
+const { STATES, WEEKDAYS } = require('../utils/constants')
 
 module.exports = {
   create: async (req, res) => {
@@ -113,37 +113,46 @@ module.exports = {
     return res.status(201).json(createdImages)
   },
 
-  add_visits: async (req, res) => {
+  add_visit: async (req, res) => {
     // #swagger.tags = ['Property']
     // #swagger.description = 'Endpoint to add available times to property'
     const { property_id } = req.params
-    let { available_times } = req.body
+    let { weekday, time } = req.body
+
+    const data = {
+      weekday,
+      time,
+      property_id
+    }
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    const visit = await PropertyVisit.findOne({ where: { property_id, weekday, time } })
+    if (visit) {
+      return res.status(409).json({
+        cod: 409,
+        description: "Horário já cadastrado para essa data."
+      })
+    }
 
     const schema = Yup.object().shape({
-      available_times: Yup.object().required(),
+      weekday: Yup.string().required().oneOf(WEEKDAYS),
+      time: Yup.string().required()
     })
 
-    await schema.validate({ available_times }, {
+    await schema.validate(data, {
       abortEarly: false
     })
 
-    const visits = []
-    Object.entries(available_times).forEach(item => {
-      const key = item[0]
-      const value = item[1]
+    const createdVisits = await PropertyVisit.create(data)
 
-      if (["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].includes(key) && value) {
-        value.forEach(time => {
-          visits.push({
-            weekday: key,
-            time,
-            property_id: property_id
-          })
-        })
-      }
-    })
-
-    return res.status(201).json(visits)
+    return res.status(201).json(createdVisits)
   },
 
   list: async (req, res) => {
@@ -382,7 +391,7 @@ module.exports = {
     // #swagger.description = 'Endpoint to delete a property visit'
 
     const { property_id } = req.params
-    const { visit_id } = req.body
+    const { weekday, time } = req.body
 
     const property = await Property.findByPk(property_id)
     if (!property) {
@@ -392,15 +401,15 @@ module.exports = {
       })
     }
 
-    const visit = await PropertyVisit.findByPk(visit_id)
+    const visit = await PropertyVisit.findOne({ where: { property_id, weekday, time } })
     if (!visit) {
       return res.status(404).json({
         cod: 404,
-        description: "Visita não encontrada."
+        description: "Visita não cadastrada nesse horário."
       })
     }
 
-    await PropertyVisit.destroy({ where: { id: visit_id } })
+    await PropertyVisit.destroy({ where: { property_id, weekday, time } })
 
     return res.status(204).json()
   },
