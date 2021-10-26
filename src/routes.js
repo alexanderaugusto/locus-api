@@ -27,13 +27,15 @@ routes.delete('/user', authMiddleware.required, UserController.delete)
 // Property routes
 routes.post('/property', authMiddleware.required, PropertyController.create)
 routes.post('/property/:property_id/images', authMiddleware.required, multer(multerConfig('/property')).array('files'), PropertyController.add_images)
-routes.post('/property/:property_id/visits', authMiddleware.required, PropertyController.add_visits)
+routes.post('/property/:property_id/visit', authMiddleware.required, PropertyController.add_visits)
 routes.post('/property/:property_id/owner/contact', authMiddleware.required, PropertyController.contact)
 routes.get('/property/:property_id', authMiddleware.optional, PropertyController.list)
 routes.get('/property/:property_id/visits', authMiddleware.optional, PropertyController.list_visits)
 routes.get('/properties', authMiddleware.optional, PropertyController.list_all)
 routes.patch('/property/:property_id', authMiddleware.required, PropertyController.update)
+routes.patch('/property/:property_id/address', authMiddleware.required, PropertyController.update_address)
 routes.delete('/property/:property_id', authMiddleware.required, PropertyController.delete)
+routes.delete('/property/:property_id/visit', authMiddleware.required, PropertyController.delete_visit)
 
 // Favorite routes
 routes.put('/property/:property_id/favorite', authMiddleware.required, FavoriteController.add)

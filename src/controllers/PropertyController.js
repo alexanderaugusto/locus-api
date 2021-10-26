@@ -2,6 +2,7 @@ const { User, Property, PropertyImage, PropertyVisit, Address, Sequelize } = req
 const Yup = require('yup')
 const mailer = require('../config/mailer')
 const { getGeolocation } = require('../utils/functions')
+const { STATES } = require('../utils/constants')
 
 module.exports = {
   create: async (req, res) => {
@@ -295,6 +296,67 @@ module.exports = {
     return res.status(200).json(propertyUpdated)
   },
 
+  update_address: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to update a property address'
+
+    const { property_id } = req.params
+    const {
+      street,
+      neighborhood,
+      number,
+      city,
+      state,
+      country,
+      zipcode
+    } = req.body
+
+    const data = {
+      street,
+      neighborhood,
+      number: number !== undefined && parseInt(number, 10),
+      city,
+      state,
+      country,
+      zipcode
+    }
+
+    const schema = Yup.object().shape({
+      street: street === undefined ? null : Yup.string().required(),
+      neighborhood: neighborhood === undefined ? null : Yup.string().required(),
+      number: number === undefined ? null : Yup.number().required(),
+      city: city === undefined ? null : Yup.string().required(),
+      state: state === undefined ? null : Yup.string().required().oneOf(STATES),
+      country: country === undefined ? null : Yup.string().required(),
+      zipcode: zipcode === undefined ? null : Yup.string().required()
+    })
+
+    await schema.validate(data, {
+      abortEarly: false
+    })
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    const [updated] = await Address.update(data, { where: { id: property.address_id } })
+
+    if (!updated) {
+      return res.status(400).json({
+        cod: 400,
+        description: "Não foi possível atualizar o endereço."
+      })
+    }
+
+    const addressUpdated = await Address.findByPk(property.address_id)
+
+    return res.status(200).json(addressUpdated)
+  },
+
   delete: async (req, res) => {
     // #swagger.tags = ['Property']
     // #swagger.description = 'Endpoint to delete a property'
@@ -311,6 +373,34 @@ module.exports = {
     }
 
     await Property.destroy({ where: { id: property_id, user_id } })
+
+    return res.status(204).json()
+  },
+
+  delete_visit: async (req, res) => {
+    // #swagger.tags = ['Property']
+    // #swagger.description = 'Endpoint to delete a property visit'
+
+    const { property_id } = req.params
+    const { visit_id } = req.body
+
+    const property = await Property.findByPk(property_id)
+    if (!property) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Imóvel não encontrado."
+      })
+    }
+
+    const visit = await PropertyVisit.findByPk(visit_id)
+    if (!visit) {
+      return res.status(404).json({
+        cod: 404,
+        description: "Visita não encontrada."
+      })
+    }
+
+    await PropertyVisit.destroy({ where: { id: visit_id } })
 
     return res.status(204).json()
   },
