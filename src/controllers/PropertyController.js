@@ -423,6 +423,13 @@ module.exports = {
     const { property_id } = req.params
     const { images_ids } = req.body
 
+    if(!images_ids){
+      return res.status(400).json({
+        cod: 400,
+        description: "Images_ids está vazio"
+      })
+    }
+
     const property = await Property.findByPk(property_id)
     if (!property) {
       return res.status(404).json({
@@ -430,14 +437,6 @@ module.exports = {
         description: "Imóvel não encontrado."
       })
     }
-
-    // const image = await PropertyImage.findByPk(image_id)
-    // if (!image) {
-    //   return res.status(404).json({
-    //     cod: 404,
-    //     description: "Imagem não encontrada."
-    //   })
-    // }
 
     const deleted = await PropertyImage.destroy({ where: { id: images_ids } })
 
@@ -447,8 +446,6 @@ module.exports = {
         description: "Não foi possível excluir a imagem."
       })
     }
-
-    // deleteFile('property/' + image.path)
 
     return res.status(204).json()
   },
