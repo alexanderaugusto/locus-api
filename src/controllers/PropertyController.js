@@ -354,6 +354,13 @@ module.exports = {
       })
     }
 
+    const addressGeolocation = await getGeolocation(data)
+    const latitude = addressGeolocation.latitude
+    const longitude = addressGeolocation.longitude
+
+    data.latitude = latitude
+    data.longitude = longitude
+
     const [updated] = await Address.update(data, { where: { id: property.address_id } })
 
     if (!updated) {
@@ -423,7 +430,7 @@ module.exports = {
     const { property_id } = req.params
     const { images_ids } = req.body
 
-    if(!images_ids){
+    if (!images_ids) {
       return res.status(400).json({
         cod: 400,
         description: "Images_ids está vazio"
