@@ -5,8 +5,8 @@ const authRequired = (req, res, next) => {
 
   if (!authHeader) {
     return res.status(401).json({
-      cod_return: 401,
-      message: 'Você precisa estar autenticado para realizar esta operação.'
+      cod: 401,
+      description: 'Você precisa estar autenticado para realizar esta operação.'
     })
   }
 
@@ -14,8 +14,8 @@ const authRequired = (req, res, next) => {
 
   if (!parts.length === 2) {
     return res.status(401).send({
-      cod_return: 401,
-      message: 'O token de autenticação possui erros.'
+      cod: 401,
+      description: 'O token de autenticação possui erros.'
     })
   }
 
@@ -23,16 +23,16 @@ const authRequired = (req, res, next) => {
 
   if (!/^Bearer$/i.test(scheme)) {
     return res.status(401).send({
-      cod_return: 401,
-      message: 'O token de autenticação possui formato inválido.'
+      cod: 401,
+      description: 'O token de autenticação possui formato inválido.'
     })
   }
 
   verifyJwt(token, (err, decoded) => {
     if (err) {
       return res.status(401).json({
-        cod_return: 401,
-        message: 'Sua sessão expirou! Faça o login novamente para continuar acessando.'
+        cod: 401,
+        description: 'Sua sessão expirou! Faça o login novamente para continuar acessando.'
       })
     }
 

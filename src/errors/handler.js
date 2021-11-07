@@ -12,14 +12,14 @@ const errorHandler = (err, req, res, next) => {
 
     return res.status(400).json({
       cod: 400,
-      message: 'Dados inválidos!',
+      description: 'Dados inválidos!',
       errors
     })
   }
 
   return res.status(500).json({
     cod: 500,
-    message: 'Ocorreu um erro inesperado! Verifique sua conexão com a internet ou tente novamente mais tarde.'
+    description: 'Ocorreu um erro inesperado! Verifique sua conexão com a internet ou tente novamente mais tarde.'
   })
 }
 
