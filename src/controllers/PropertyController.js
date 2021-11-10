@@ -15,7 +15,19 @@ module.exports = {
     let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address = {}, available_times } = req.body
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
-    const propertyData = { user_id, title, description, price, bedrooms, bathrooms, area, place, garage, animal, type }
+    const propertyData = { 
+      user_id, 
+      title, 
+      description, 
+      price: price.replace(/\./g, '').replace(',', '.'), 
+      bedrooms, 
+      bathrooms, 
+      area, 
+      place, 
+      garage, 
+      animal, 
+      type 
+    }
     const addressData = { street, neighborhood, number, city, state, country, zipcode }
 
     const schema = Yup.object().shape({
