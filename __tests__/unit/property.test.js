@@ -25,7 +25,7 @@ describe("Property test", () => {
       .send({
         title: "Casa da Praia",
         description: "Esta casa possui vista para o mar e é muito bonita",
-        price: 1450.00,
+        price: 1450,
         bedrooms: 3,
         bathrooms: 1,
         area: 40,

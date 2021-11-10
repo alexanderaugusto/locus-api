@@ -19,7 +19,7 @@ module.exports = {
       user_id, 
       title, 
       description, 
-      price: price.replace(/\./g, '').replace(',', '.'), 
+      price: price.toString().replace(/\./g, '').replace(',', '.'), 
       bedrooms, 
       bathrooms, 
       area, 
