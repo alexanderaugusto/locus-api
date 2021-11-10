@@ -40,7 +40,7 @@ module.exports = {
     if (!created) {
       return res.status(409).json({
         cod: 409,
-        msg: 'Este email já foi cadastrado anteriormente.'
+        description: 'Este email já foi cadastrado anteriormente.'
       })
     }
 
