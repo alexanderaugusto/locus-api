@@ -145,10 +145,19 @@ module.exports = {
       })
     }
 
-    const visits = await Visit.findAll({
-      where: {
-        user_id
-      }
+    const userVisits = await Visit.findAll({
+      where: { user_id }
+    })
+
+    const propertiesId = userVisits.map(visit => visit.property_id)
+    const properties = await Property.findAll({
+      where: { id: propertiesId },
+      include: { association: 'images' }
+    })
+
+    const visits = userVisits.map(visit => {
+      const property = properties.find(property => property.id === visit.property_id)
+      return { ...visit.toJSON(), property }
     })
 
     return res.status(200).json(visits)
