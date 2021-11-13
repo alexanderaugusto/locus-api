@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     cpf: DataTypes.STRING,
     phone: DataTypes.STRING,
-    avatar: DataTypes.STRING
+    avatar: DataTypes.STRING,
+    is_oauth_user: DataTypes.BOOLEAN
   }, {
     hooks: {
       beforeSave: async (user) => {

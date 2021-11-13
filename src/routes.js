@@ -10,6 +10,7 @@ const UserController = require('./controllers/UserController')
 
 // Authentication routes
 routes.post('/auth/login', AuthController.login)
+routes.post('/auth/login/google', AuthController.loginWithGoogle)
 routes.put('/auth/renew', authMiddleware.required, AuthController.renew_token)
 
 // User routes

@@ -32,6 +32,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false 
       },
+      is_oauth_user: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false 
+      },
       address_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
