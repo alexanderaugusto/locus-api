@@ -248,6 +248,22 @@ module.exports = {
     return res.status(200).json(visits)
   },
 
+  list_cities: async (req, res) => {
+    Address.findAll({
+      attributes: ['city', 'state'],
+      group: ['city', 'state']
+    }).then(addresses => {
+      return res.status(200).json(addresses)
+    })
+
+    // Address.findAll({
+    //   attributes: ['city', 'state'],
+    //   distinct: true
+    // }).then(addresses => {
+    //   return res.status(200).json(addresses)
+    // })
+  },
+
   update: async (req, res) => {
     // #swagger.tags = ['Property']
     // #swagger.description = 'Endpoint to update a property'

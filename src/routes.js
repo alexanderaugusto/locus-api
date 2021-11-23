@@ -33,6 +33,7 @@ routes.post('/property/:property_id/owner/contact', authMiddleware.required, Pro
 routes.get('/property/:property_id', authMiddleware.optional, PropertyController.list)
 routes.get('/property/:property_id/visits', authMiddleware.optional, PropertyController.list_visits)
 routes.get('/properties', authMiddleware.optional, PropertyController.list_all)
+routes.get('/cities', authMiddleware.optional, PropertyController.list_cities)
 routes.patch('/property/:property_id', authMiddleware.required, PropertyController.update)
 routes.patch('/property/:property_id/address', authMiddleware.required, PropertyController.update_address)
 routes.delete('/property/:property_id', authMiddleware.required, PropertyController.delete)
