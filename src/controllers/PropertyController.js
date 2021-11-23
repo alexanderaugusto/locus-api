@@ -255,13 +255,6 @@ module.exports = {
     }).then(addresses => {
       return res.status(200).json(addresses)
     })
-
-    // Address.findAll({
-    //   attributes: ['city', 'state'],
-    //   distinct: true
-    // }).then(addresses => {
-    //   return res.status(200).json(addresses)
-    // })
   },
 
   update: async (req, res) => {
