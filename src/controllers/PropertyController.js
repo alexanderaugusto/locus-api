@@ -483,7 +483,7 @@ module.exports = {
     // #swagger.description = 'Endpoint to list all properties'
 
     const { user_id } = req
-    const { price, bedrooms, bathrooms, area, place, animal, type } = JSON.parse(JSON.stringify(req.query))
+    const { price, bedrooms, bathrooms, area, place, animal, type, city } = JSON.parse(JSON.stringify(req.query))
 
     const filter = {
       price: { [Sequelize.Op.between]: price && JSON.parse(JSON.stringify(price)) },
@@ -495,10 +495,16 @@ module.exports = {
       type: type && JSON.parse(JSON.stringify(type))
     }
 
+    const addressFilter = {
+      city: city
+    }
+
+    console.log(filter.address)
+
     Object.entries(filter).forEach(([key]) => req.query[key] === undefined && delete filter[key])
 
     const properties = await Property.findAll({
-      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }],
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address', where: addressFilter }],
       where: filter
     })
 
