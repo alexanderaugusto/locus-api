@@ -483,7 +483,7 @@ module.exports = {
     // #swagger.description = 'Endpoint to list all properties'
 
     const { user_id } = req
-    const { price, bedrooms, bathrooms, area, place, animal, type, city, state } = JSON.parse(JSON.stringify(req.query))
+    const { price, bedrooms, bathrooms, area, place, animal, type, city } = JSON.parse(JSON.stringify(req.query))
 
     const filter = {
       price: { [Sequelize.Op.between]: price && JSON.parse(JSON.stringify(price)) },
