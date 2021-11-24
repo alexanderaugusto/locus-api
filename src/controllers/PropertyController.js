@@ -15,18 +15,18 @@ module.exports = {
     let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address = {}, available_times } = req.body
     const { street, neighborhood, number, city, state, country, zipcode } = address
 
-    const propertyData = { 
-      user_id, 
-      title, 
-      description, 
-      price: price.toString().replace(/\./g, '').replace(',', '.'), 
-      bedrooms, 
-      bathrooms, 
-      area, 
-      place, 
-      garage, 
-      animal, 
-      type 
+    const propertyData = {
+      user_id,
+      title,
+      description,
+      price: price.toString().replace(/\./g, '').replace(',', '.'),
+      bedrooms,
+      bathrooms,
+      area,
+      place,
+      garage,
+      animal,
+      type
     }
     const addressData = { street, neighborhood, number, city, state, country, zipcode }
 
@@ -485,24 +485,19 @@ module.exports = {
     const { user_id } = req
     const { price, bedrooms, bathrooms, area, place, animal, type, city } = JSON.parse(JSON.stringify(req.query))
 
-    const filter = {
-      price: { [Sequelize.Op.between]: price && JSON.parse(JSON.stringify(price)) },
-      bedrooms: bedrooms && parseInt(bedrooms, 10),
-      bathrooms: bathrooms && parseInt(bathrooms, 10),
-      area: { [Sequelize.Op.between]: area && JSON.parse(JSON.stringify(area)) },
-      place: place && parseInt(place, 10),
-      animal: animal && JSON.parse(animal),
-      type: type && JSON.parse(JSON.stringify(type))
-    }
+    const filter = {}
 
-    const addressFilter = city ? {
-      city: city,
-    } : ''
-
-    Object.entries(filter).forEach(([key]) => req.query[key] === undefined && delete filter[key])
+    price && (filter.price = { [Sequelize.Op.between]: JSON.parse(JSON.stringify(price)) })
+    bedrooms && (filter.bedrooms = parseInt(bedrooms, 10))
+    bathrooms && (filter.bathrooms = parseInt(bathrooms, 10))
+    area && (filter.area = { [Sequelize.Op.between]: JSON.parse(JSON.stringify(area)) })
+    place && (filter.place = parseInt(place, 10))
+    animal && (filter.animal = JSON.parse(animal))
+    type && (filter.type = JSON.parse(JSON.stringify(type)))
+    city && (filter['$address.city$'] = JSON.parse(JSON.stringify(city)))
 
     const properties = await Property.findAll({
-      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address', where: addressFilter }],
+      include: [{ association: 'images' }, { association: 'owner' }, { association: 'address' }],
       where: filter
     })
 
