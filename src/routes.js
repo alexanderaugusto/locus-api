@@ -7,6 +7,7 @@ const AuthController = require('./controllers/AuthController')
 const FavoriteController = require('./controllers/FavoriteController')
 const PropertyController = require('./controllers/PropertyController')
 const UserController = require('./controllers/UserController')
+const ExternalController = require('./controllers/ExternalController')
 
 // Authentication routes
 routes.post('/auth/login', AuthController.login)
@@ -43,5 +44,8 @@ routes.delete('/property/:property_id/image', authMiddleware.required, PropertyC
 // Favorite routes
 routes.put('/property/:property_id/favorite', authMiddleware.required, FavoriteController.add)
 routes.delete('/property/:property_id/favorite', authMiddleware.required, FavoriteController.delete)
+
+// External routes
+routes.get('/external/geolocation', authMiddleware.optional, ExternalController.get_geolocation)
 
 module.exports = routes

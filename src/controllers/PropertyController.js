@@ -1,10 +1,8 @@
 const { User, Property, PropertyImage, PropertyVisit, Address, Sequelize } = require('../models')
 const Yup = require('yup')
 const mailer = require('../config/mailer')
-const { getGeolocation } = require('../utils/functions')
+const positionStackApi = require('../services/positionStackApi')
 const { STATES, WEEKDAYS } = require('../utils/constants')
-const deleteFile = require('../utils/deleteFile')
-const { image } = require('../config/cloudinary')
 
 module.exports = {
   create: async (req, res) => {
@@ -13,7 +11,7 @@ module.exports = {
 
     const { user_id, files = [] } = req
     let { title, description, price, bedrooms, bathrooms, area, place, garage = 0, animal, type, address = {}, available_times } = req.body
-    const { street, neighborhood, number, city, state, country, zipcode } = address
+    const { street, neighborhood, number, city, state, country, zipcode, latitude, longitude } = address
 
     const propertyData = {
       user_id,
@@ -28,7 +26,7 @@ module.exports = {
       animal,
       type
     }
-    const addressData = { street, neighborhood, number, city, state, country, zipcode }
+    const addressData = { street, neighborhood, number, city, state, country, zipcode, latitude, longitude }
 
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -47,20 +45,15 @@ module.exports = {
         city: Yup.string().required(),
         state: Yup.string().required(),
         country: Yup.string().required(),
-        zipcode: Yup.string().required()
+        zipcode: Yup.string().required(),
+        latitude: Yup.string().optional(),
+        longitude: Yup.string().optional()
       })
     })
 
     await schema.validate({ ...propertyData, address: addressData }, {
       abortEarly: false
     })
-
-    const addressGeolocation = await getGeolocation(address)
-    const latitude = addressGeolocation.latitude
-    const longitude = addressGeolocation.longitude
-
-    addressData.latitude = latitude
-    addressData.longitude = longitude
 
     const createdAddress = await Address.create(addressData)
     propertyData.address_id = createdAddress.id
@@ -375,12 +368,16 @@ module.exports = {
       })
     }
 
-    const addressGeolocation = await getGeolocation(data)
-    const latitude = addressGeolocation.latitude
-    const longitude = addressGeolocation.longitude
+    const config = {
+      params: {
+        query: `${street} ${number}, ${neighborhood}, ${city}, ${state}, ${country}, ${zipcode}`
+      }
+    }
 
-    data.latitude = latitude
-    data.longitude = longitude
+    const geolocationResponse = await positionStackApi('/v1/forward', config)
+
+    data.latitude = geolocationResponse.data.data[0] ? geolocationResponse.data.data[0].latitude : null
+    data.longitude = geolocationResponse.data.data[0] ? geolocationResponse.data.data[0].longitude : null
 
     const [updated] = await Address.update(data, { where: { id: property.address_id } })
 
