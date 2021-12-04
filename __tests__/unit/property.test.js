@@ -1,11 +1,8 @@
-jest.mock('../../src/utils/functions')
-
 const request = require('supertest')
 const app = require('../../src/app')
 const factory = require('../factories')
 const truncate = require('../utils/truncate')
 const { generateJwt } = require('../../src/utils/auth')
-const functions = require('../../src/utils/functions')
 
 describe("Property test", () => {
   beforeEach(async () => {
@@ -13,11 +10,6 @@ describe("Property test", () => {
   })
 
   it("Should create a property to user without images using api route", async () => {
-    functions.getGeolocation.mockResolvedValue({
-      latitude: null,
-      longitude: null
-    })
-
     const user = await factory.create('User')
 
     const response = await request(app)
