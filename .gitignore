@@ -5,6 +5,7 @@ tmp/uploads/property/*
 tmp/uploads/user/*
 !tmp/uploads/property/.gitkeep
 !tmp/uploads/user/default-avatar.png
+!tmp/uploads/property/property*_img*.jpg
 
 __tests__/coverage
 __tests__/database.sqlite
